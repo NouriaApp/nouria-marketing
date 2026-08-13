@@ -1,1250 +1,1241 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import logo from './logo.png';
-import { Inter } from 'next/font/google';
-import { useEffect } from 'react';
+import Link from "next/link";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useInView,
+  AnimatePresence,
+} from "framer-motion";
+import { useRef, useEffect, useState, useCallback } from "react";
+import Navbar from "@/components/Navbar";
+import Footer from "@/components/Footer";
+import {
+  SparklesIcon,
+  ShoppingCartIcon,
+  FireIcon,
+  ShieldCheckIcon,
+  CubeIcon,
+  UsersIcon,
+  ArrowRightIcon,
+  CalendarDaysIcon,
+  ClockIcon,
+  BoltIcon,
+  CheckCircleIcon,
+  ChartBarIcon,
+  HeartIcon,
+  ChevronDownIcon,
+  XMarkIcon,
+  CheckIcon,
+  StarIcon,
+} from "@heroicons/react/24/outline";
 
-const inter = Inter({
-  subsets: ['latin'],
-  display: 'swap',
-});
+/* ═══════════════════════════════════════════════════════
+   TYPES
+   ═══════════════════════════════════════════════════════ */
 
-const stats = [
-  {
-    value: '40%',
-    title: 'of food purchased',
-    subtitle: 'ends up wasted',
-  },
-  {
-    value: '15hrs',
-    title: 'spent planning',
-    subtitle: 'meals each month',
-  },
-  {
-    value: '$200+',
-    title: 'lost monthly',
-    subtitle: 'on unused groceries',
-  },
-];
+type Ease4 = [number, number, number, number];
 
-const featureCards = [
-  {
-    eyebrow: 'Kitchen Intelligence',
-    title: 'See your kitchen like a live system',
-    text: 'Nouria organizes what you already have, what is running low, and what should be used next so your kitchen finally feels under control.',
-  },
-  {
-    eyebrow: 'Daily Execution',
-    title: 'Know exactly what to cook next',
-    text: 'Instead of asking what to make every day, you open Nouria and get a clear plan built around your pantry, timing, and routine.',
-  },
-  {
-    eyebrow: 'Waste Reduction',
-    title: 'Buy less by using more of what you own',
-    text: 'Nouria helps you cook through ingredients before they expire so fewer groceries disappear into the back of the fridge.',
-  },
-  {
-    eyebrow: 'Operational Simplicity',
-    title: 'Less planning. Less friction. Better food.',
-    text: 'The experience is designed to remove the mental load of meal planning without turning cooking into another spreadsheet.',
-  },
-];
+/* ═══════════════════════════════════════════════════════
+   ANIMATION PRESETS
+   ═══════════════════════════════════════════════════════ */
 
-const panels = [
-  {
-    number: '01',
-    title: 'Bring your kitchen online',
-    text: 'Receipts, ingredients, pantry staples, and groceries come into one system so Nouria understands what your kitchen looks like right now.',
-  },
-  {
-    number: '02',
-    title: 'Nouria builds the daily decision layer',
-    text: 'Meals, recommendations, and priorities update around what you have, what you like, and what should be used first.',
-  },
-  {
-    number: '03',
-    title: 'You open the app and just cook',
-    text: 'No overthinking. No guessing what to buy. No wasting time trying to plan a perfect week.',
-  },
-];
+const ease: Ease4 = [0.25, 0.46, 0.45, 0.94];
 
-export default function HomePage() {
+const fadeUp = {
+  hidden: { opacity: 0, y: 32 },
+  visible: (i: number) => ({
+    opacity: 1,
+    y: 0,
+    transition: { delay: i * 0.1, duration: 0.7, ease },
+  }),
+};
+
+const fadeIn = {
+  hidden: { opacity: 0 },
+  visible: (i: number) => ({
+    opacity: 1,
+    transition: { delay: i * 0.12, duration: 0.8, ease },
+  }),
+};
+
+const scaleIn = {
+  hidden: { opacity: 0, scale: 0.85, y: 20 },
+  visible: (i: number) => ({
+    opacity: 1,
+    scale: 1,
+    y: 0,
+    transition: { delay: i * 0.08, duration: 0.6, ease },
+  }),
+};
+
+const slideInRight = {
+  hidden: { opacity: 0, x: 80 },
+  visible: {
+    opacity: 1,
+    x: 0,
+    transition: { duration: 0.9, ease },
+  },
+};
+
+const wordReveal = {
+  hidden: {},
+  visible: { transition: { staggerChildren: 0.08 } },
+};
+
+const wordChild = {
+  hidden: { opacity: 0, y: 30, rotateX: -40 },
+  visible: {
+    opacity: 1,
+    y: 0,
+    rotateX: 0,
+    transition: { duration: 0.5, ease },
+  },
+};
+
+/* ═══════════════════════════════════════════════════════
+   ANIMATED COUNTER HOOK
+   ═══════════════════════════════════════════════════════ */
+
+function useCounter(target: number, duration = 2200) {
+  const [count, setCount] = useState(0);
+  const ref = useRef<HTMLDivElement>(null);
+  const isInView = useInView(ref, { once: true, margin: "-80px" });
+
   useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-visible');
-          }
-        });
-      },
-      {
-        threshold: 0.14,
-      }
-    );
-
-    const elements = document.querySelectorAll('.reveal');
-    elements.forEach((element) => observer.observe(element));
-
-    return () => {
-      elements.forEach((element) => observer.unobserve(element));
+    if (!isInView) return;
+    const startTime = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 4);
+      setCount(Math.round(eased * target));
+      if (progress < 1) requestAnimationFrame(tick);
     };
-  }, []);
+    requestAnimationFrame(tick);
+  }, [isInView, target, duration]);
 
+  return { count, ref };
+}
+
+/* ═══════════════════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════════════════ */
+
+const features = [
+  {
+    icon: SparklesIcon,
+    title: "AI Meal Planning",
+    desc: "Generates personalized weekly plans that adapt in real-time to what's in your pantry, your schedule, and your family's preferences.",
+    gradient: "from-emerald-500/20 to-teal-500/20",
+    borderGradient: "from-emerald-500/40 to-teal-500/40",
+    iconBg: "bg-emerald-500/10",
+    iconColor: "text-emerald-400",
+    span: "sm:col-span-2 lg:col-span-2 lg:row-span-2",
+    large: true,
+  },
+  {
+    icon: ShoppingCartIcon,
+    title: "Smart Grocery Lists",
+    desc: "Auto-organized by store aisle with price estimates and quantity optimization.",
+    gradient: "from-cyan-500/20 to-blue-500/20",
+    borderGradient: "from-cyan-500/40 to-blue-500/40",
+    iconBg: "bg-cyan-500/10",
+    iconColor: "text-cyan-400",
+    span: "",
+    large: false,
+  },
+  {
+    icon: FireIcon,
+    title: "Adaptive Cooking",
+    desc: "Step-by-step guidance that matches your skill level and available equipment.",
+    gradient: "from-orange-500/20 to-amber-500/20",
+    borderGradient: "from-orange-500/40 to-amber-500/40",
+    iconBg: "bg-orange-500/10",
+    iconColor: "text-orange-400",
+    span: "",
+    large: false,
+  },
+  {
+    icon: ShieldCheckIcon,
+    title: "Dietary Intelligence",
+    desc: "Hard restrictions like allergies are never overridden. Soft preferences flex intelligently around your life.",
+    gradient: "from-rose-500/20 to-pink-500/20",
+    borderGradient: "from-rose-500/40 to-pink-500/40",
+    iconBg: "bg-rose-500/10",
+    iconColor: "text-rose-400",
+    span: "",
+    large: false,
+  },
+  {
+    icon: CubeIcon,
+    title: "Pantry Tracking",
+    desc: "Scan receipts, track inventory, reduce waste, and save money automatically.",
+    gradient: "from-violet-500/20 to-purple-500/20",
+    borderGradient: "from-violet-500/40 to-purple-500/40",
+    iconBg: "bg-violet-500/10",
+    iconColor: "text-violet-400",
+    span: "",
+    large: false,
+  },
+  {
+    icon: UsersIcon,
+    title: "Built for Households",
+    desc: "Scales portions automatically. Handles picky eaters, multiple diets, and varying schedules with ease.",
+    gradient: "from-primary-500/20 to-emerald-500/20",
+    borderGradient: "from-primary-500/40 to-emerald-500/40",
+    iconBg: "bg-primary-500/10",
+    iconColor: "text-primary-400",
+    span: "sm:col-span-2 lg:col-span-1",
+    large: false,
+  },
+];
+
+const steps = [
+  {
+    icon: UsersIcon,
+    title: "Create your profile",
+    desc: "Household size, skill level, equipment, dietary needs and restrictions.",
+    color: "from-emerald-500 to-teal-500",
+  },
+  {
+    icon: CalendarDaysIcon,
+    title: "Set preferences",
+    desc: "Favorite cuisines, time budget, disliked ingredients, and cooking goals.",
+    color: "from-cyan-500 to-blue-500",
+  },
+  {
+    icon: SparklesIcon,
+    title: "Get your plan",
+    desc: "AI generates a personalized weekly meal plan with grocery lists included.",
+    color: "from-violet-500 to-purple-500",
+  },
+  {
+    icon: FireIcon,
+    title: "Cook with confidence",
+    desc: "Follow adaptive step-by-step guidance tailored to your kitchen.",
+    color: "from-orange-500 to-amber-500",
+  },
+];
+
+const testimonials = [
+  {
+    name: "Sarah M.",
+    role: "Busy Mom of 3",
+    avatar: "S",
+    gradient: "from-emerald-400 to-teal-400",
+    text: "Nouria transformed our family dinners. My kids are actually excited about meals now, and I've cut our grocery bill by 25%.",
+    rating: 5,
+  },
+  {
+    name: "James L.",
+    role: "Home Cook Enthusiast",
+    avatar: "J",
+    gradient: "from-cyan-400 to-blue-400",
+    text: "The AI actually understands my pantry. I used to waste so much food — now everything gets used and the recipes are incredible.",
+    rating: 5,
+  },
+  {
+    name: "Priya K.",
+    role: "Dietary Restrictions",
+    avatar: "P",
+    gradient: "from-violet-400 to-purple-400",
+    text: "As someone with celiac disease, I finally feel safe. Nouria never suggests anything with gluten and the meals are genuinely delicious.",
+    rating: 5,
+  },
+];
+
+const faqs = [
+  {
+    q: "How does Nouria handle severe food allergies?",
+    a: "Allergies are classified as hard restrictions in our system. They can never be overridden by the AI — not in meal suggestions, not in substitutions, not in grocery lists. We treat them as absolute constraints that the system is built around.",
+  },
+  {
+    q: "Can multiple family members have different dietary needs?",
+    a: "Absolutely. Nouria supports per-person profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
+  },
+  {
+    q: "What happens to my data?",
+    a: "Your data stays yours. We use end-to-end encryption, never sell your information to third parties, and you can export or delete your data at any time. We only use anonymized, aggregate patterns to improve the AI.",
+  },
+  {
+    q: "Is Nouria free during the beta?",
+    a: "Yes — the private beta is completely free. Early testers will also receive a significant lifetime discount when we launch publicly. No credit card is required to join.",
+  },
+  {
+    q: "How does the pantry tracking work?",
+    a: "You can scan grocery receipts with your phone camera, manually add items, or connect to supported grocery delivery services. The system tracks expiration dates and suggests recipes that use items before they go bad.",
+  },
+];
+
+const comparisonBefore = [
+  "30+ minutes deciding what to cook",
+  "Forgotten ingredients at the store",
+  "Food waste piling up weekly",
+  "Same 5 recipes on rotation",
+  "Dietary needs as an afterthought",
+];
+
+const comparisonAfter = [
+  "Meals planned in seconds by AI",
+  "Perfect grocery lists every time",
+  "Near-zero waste pantry management",
+  "Endless variety matched to your taste",
+  "Dietary needs built into every meal",
+];
+
+const marqueeItems = [
+  "AI-Powered Planning",
+  "Smart Grocery Lists",
+  "Pantry Tracking",
+  "Allergy Safe",
+  "Multi-Diet Support",
+  "Receipt Scanning",
+  "Nutrition Tracking",
+  "Waste Reduction",
+  "Skill Adaptation",
+  "Household Scaling",
+];
+
+/* ═══════════════════════════════════════════════════════
+   COMPONENTS
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Phone Mockup ── */
+function PhoneMockup() {
   return (
-    <main className={`${inter.className} page-shell`}>
-      <div className="site-glow site-glow-one" />
-      <div className="site-glow site-glow-two" />
-      <div className="site-glow site-glow-three" />
-
-      <header className="navbar">
-        <a className="brand" href="/" aria-label="Nouria home">
-          <div className="brand-mark">
-            <Image src={logo} alt="Nouria logo" fill sizes="40px" className="brand-image" priority />
-          </div>
-          <span className="brand-name">Nouria</span>
-        </a>
-
-        <nav className="nav-links" aria-label="Primary">
-          <a href="/product">Product</a>
-          <a href="/intelligence">Intelligence</a>
-          <a href="/company">Company</a>
-          <a href="/support">Support</a>
-        </nav>
-
-        <a className="nav-cta" href="/early-access">
-          Early Access
-        </a>
-      </header>
-
-      <section className="hero-section">
-        <div className="hero-grid">
-          <div className="hero-copy reveal is-visible">
-            <div className="hero-chip">AI food operating system</div>
-
-            <h1>
-              The system for a
-              <span>smarter kitchen.</span>
-            </h1>
-
-            <p className="hero-description">
-              Nouria turns pantry chaos, meal decisions, and grocery waste into one clean,
-              intelligent experience built for modern life.
-            </p>
-
-            <div className="hero-actions">
-              <a className="primary-button" href="/early-access">
-                Get Early Access
-                <span className="button-arrow">→</span>
-              </a>
-              <a className="secondary-button" href="/product">
-                Explore Product
-              </a>
-            </div>
-
-            <div className="hero-micro">
-              <span>No meal planning overload</span>
-              <span>Less waste</span>
-              <span>Sharper decisions</span>
-            </div>
-          </div>
-
-          <div className="hero-visual reveal is-visible" aria-hidden="true">
-            <div className="visual-orb visual-orb-a" />
-            <div className="visual-orb visual-orb-b" />
-
-            <div className="hero-card hero-card-back">
-              <div className="glass-label">Kitchen State</div>
-              <div className="glass-title">Everything you own, organized</div>
-              <div className="mini-grid">
-                <div className="mini-tile">
-                  <span>Fresh</span>
-                  <strong>18 items</strong>
-                </div>
-                <div className="mini-tile">
-                  <span>Use next</span>
-                  <strong>4 items</strong>
-                </div>
-                <div className="mini-tile">
-                  <span>Meals ready</span>
-                  <strong>12 ideas</strong>
-                </div>
-                <div className="mini-tile">
-                  <span>Waste risk</span>
-                  <strong>Low</strong>
-                </div>
+    <div className="relative w-[280px] sm:w-[320px]">
+      <div className="relative rounded-[2.5rem] border-[6px] border-surface-700/80 bg-surface-900 shadow-2xl shadow-black/50 overflow-hidden animate-pulse-glow">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-surface-700/80 rounded-b-2xl z-20" />
+        <div className="relative pt-8 pb-4 px-4 min-h-[520px] sm:min-h-[580px] bg-gradient-to-b from-surface-900 to-surface-950">
+          <div className="flex items-center justify-between text-[10px] text-surface-400 px-1 mb-5">
+            <span>9:41</span>
+            <div className="flex gap-1 items-center">
+              <div className="w-3.5 h-2 rounded-sm border border-surface-400 relative">
+                <div className="absolute inset-[1px] right-[2px] bg-primary-400 rounded-[1px]" />
               </div>
             </div>
-
-            <div className="phone-shell">
-              <div className="phone-topbar">
-                <div className="phone-dots">
-                  <span />
-                  <span />
-                  <span />
-                </div>
-                <div className="phone-top-pill">Nouria Intelligence</div>
-              </div>
-
-              <div className="phone-body">
-                <div className="phone-logo-wrap">
-                  <div className="phone-logo-mark">
-                    <Image src={logo} alt="Nouria logo" fill sizes="76px" className="brand-image" />
-                  </div>
-                </div>
-
-                <p className="phone-kicker">Tonight</p>
-                <h3 className="phone-title">Lemon garlic salmon bowl</h3>
-                <p className="phone-subtitle">Built from what is already in your kitchen.</p>
-
-                <div className="phone-panel phone-panel-primary">
-                  <span className="panel-label">Recommended now</span>
-                  <strong>Uses 5 ingredients you already own</strong>
-                </div>
-
-                <div className="phone-panel-row">
-                  <div className="phone-panel compact">
-                    <span className="panel-label">Waste avoided</span>
-                    <strong>$24 this week</strong>
-                  </div>
-                  <div className="phone-panel compact">
-                    <span className="panel-label">Prep time</span>
-                    <strong>18 min</strong>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div className="floating-glass floating-left">Uses what you already have</div>
-            <div className="floating-glass floating-right">Plans around real life</div>
-            <div className="floating-glass floating-bottom">No kitchen guesswork</div>
           </div>
-        </div>
-      </section>
-
-      <section className="stats-section reveal">
-        <div className="section-heading">
-          <span className="section-kicker">Why this matters</span>
-          <h2>The kitchen is still one of the most broken systems in everyday life.</h2>
-        </div>
-
-        <div className="stats-grid">
-          {stats.map((stat, index) => (
-            <article className="stat-card" key={stat.title} style={{ transitionDelay: `${index * 80}ms` }}>
-              <div className="stat-value">{stat.value}</div>
-              <h3>{stat.title}</h3>
-              <p>{stat.subtitle}</p>
-            </article>
+          <div className="mb-5">
+            <p className="text-surface-400 text-xs">Good evening</p>
+            <p className="text-white text-base font-semibold">Sarah</p>
+          </div>
+          <div className="rounded-2xl bg-gradient-to-br from-primary-500/20 to-primary-800/10 border border-primary-500/20 p-3.5 mb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-[10px] font-medium text-primary-300 uppercase tracking-wider">Tonight&apos;s Dinner</span>
+              <span className="text-[10px] text-surface-400 flex items-center gap-1">
+                <ClockIcon className="w-3 h-3" /> 35 min
+              </span>
+            </div>
+            <p className="text-white text-sm font-semibold mb-1">Lemon Herb Chicken</p>
+            <p className="text-surface-400 text-[11px] mb-3">with roasted vegetables & quinoa</p>
+            <div className="flex gap-2">
+              {[
+                { label: "Cal", val: "480" },
+                { label: "Protein", val: "38g" },
+                { label: "Carbs", val: "42g" },
+              ].map((n) => (
+                <div key={n.label} className="flex-1 rounded-lg bg-white/5 px-2 py-1.5 text-center">
+                  <p className="text-[9px] text-surface-400">{n.label}</p>
+                  <p className="text-[11px] font-semibold text-white">{n.val}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+          <p className="text-surface-400 text-[10px] font-medium uppercase tracking-wider mb-2 mt-4">Tomorrow</p>
+          {[
+            { time: "8:00 AM", meal: "Greek Yogurt Bowl", color: "bg-accent-400" },
+            { time: "12:30 PM", meal: "Mediterranean Wrap", color: "bg-primary-400" },
+            { time: "7:00 PM", meal: "Salmon Teriyaki", color: "bg-cyan-400" },
+          ].map((m) => (
+            <div key={m.meal} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
+              <div className={`w-1 h-8 rounded-full ${m.color}`} />
+              <div className="flex-1">
+                <p className="text-white text-xs font-medium">{m.meal}</p>
+                <p className="text-surface-500 text-[10px]">{m.time}</p>
+              </div>
+              <ArrowRightIcon className="w-3 h-3 text-surface-500" />
+            </div>
           ))}
-        </div>
-      </section>
-
-      <section className="feature-section">
-        <div className="section-heading reveal">
-          <span className="section-kicker">Designed for Nouria</span>
-          <h2>A cleaner, sharper experience than another recipe or grocery app.</h2>
-        </div>
-
-        <div className="feature-grid">
-          {featureCards.map((card, index) => (
-            <article className="feature-card reveal" key={card.title} style={{ transitionDelay: `${index * 90}ms` }}>
-              <span className="feature-eyebrow">{card.eyebrow}</span>
-              <h3>{card.title}</h3>
-              <p>{card.text}</p>
-            </article>
-          ))}
-        </div>
-      </section>
-
-      <section className="system-section">
-        <div className="system-shell reveal">
-          <div className="system-copy">
-            <span className="section-kicker">Nouria System</span>
-            <h2>Built to feel premium, calm, and operational.</h2>
-            <p>
-              Nouria should not feel like work. The visual language is intentionally clean,
-              elevated, and intelligent so the product feels more like a high end operating
-              system than a cluttered utility app.
-            </p>
-          </div>
-
-          <div className="system-stack">
-            {panels.map((panel, index) => (
-              <article className="system-panel" key={panel.number} style={{ transitionDelay: `${index * 110}ms` }}>
-                <div className="system-number">{panel.number}</div>
-                <div>
-                  <h3>{panel.title}</h3>
-                  <p>{panel.text}</p>
-                </div>
-              </article>
+          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-around py-3 px-6 border-t border-white/5 bg-surface-950/80 backdrop-blur-sm">
+            {[CalendarDaysIcon, ShoppingCartIcon, SparklesIcon, UsersIcon].map((Icon, i) => (
+              <Icon key={i} className={`w-5 h-5 ${i === 0 ? "text-primary-400" : "text-surface-500"}`} />
             ))}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── Floating Card ── */
+function FloatingCard({
+  children,
+  className = "",
+  delay = 0,
+}: {
+  children: React.ReactNode;
+  className?: string;
+  delay?: number;
+}) {
+  return (
+    <motion.div
+      className={`absolute rounded-xl border border-white/10 bg-surface-800/80 backdrop-blur-xl shadow-2xl shadow-black/40 px-4 py-3 ${className}`}
+      initial={{ opacity: 0, scale: 0.7, y: 20 }}
+      animate={{ opacity: 1, scale: 1, y: 0 }}
+      transition={{ delay: delay + 1, duration: 0.7, ease }}
+    >
+      <div className="animate-float" style={{ animationDelay: `${delay}s` }}>
+        {children}
+      </div>
+    </motion.div>
+  );
+}
+
+/* ── Stat Card ── */
+function StatCard({ value, suffix, label, icon: Icon }: { value: number; suffix: string; label: string; icon: React.ElementType }) {
+  const { count, ref } = useCounter(value);
+  return (
+    <motion.div
+      ref={ref}
+      variants={scaleIn}
+      className="relative text-center px-6 py-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] group hover:bg-white/[0.04] transition-all duration-500"
+    >
+      <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mx-auto mb-4 text-primary-400 group-hover:scale-110 transition-transform duration-500">
+        <Icon className="w-6 h-6" />
+      </div>
+      <p className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-b from-white to-surface-400 bg-clip-text text-transparent">
+        {count}
+        {suffix}
+      </p>
+      <p className="mt-2 text-sm text-surface-400">{label}</p>
+    </motion.div>
+  );
+}
+
+/* ── FAQ Item ── */
+function FaqItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boolean; onToggle: () => void }) {
+  return (
+    <div className="border-b border-white/[0.06]">
+      <button
+        onClick={onToggle}
+        className="flex items-center justify-between w-full py-6 text-left group"
+      >
+        <span className="text-[15px] font-medium text-white group-hover:text-primary-400 transition-colors pr-8">
+          {q}
+        </span>
+        <motion.div
+          animate={{ rotate: isOpen ? 180 : 0 }}
+          transition={{ duration: 0.3, ease }}
+        >
+          <ChevronDownIcon className="w-5 h-5 text-surface-500 flex-shrink-0" />
+        </motion.div>
+      </button>
+      <AnimatePresence initial={false}>
+        {isOpen && (
+          <motion.div
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.35, ease }}
+            className="overflow-hidden"
+          >
+            <p className="pb-6 text-surface-400 text-[14px] leading-relaxed max-w-2xl">
+              {a}
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </div>
+  );
+}
+
+/* ── Parallax Section ── */
+function ParallaxSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start end", "end start"],
+  });
+
+  const textX = useTransform(scrollYProgress, [0, 1], [-150, 150]);
+  const card1Y = useTransform(scrollYProgress, [0, 1], [60, -60]);
+  const card2Y = useTransform(scrollYProgress, [0, 1], [-60, 60]);
+  const card3Y = useTransform(scrollYProgress, [0, 1], [120, -120]);
+
+  return (
+    <div
+      ref={containerRef}
+      className="relative h-[480px] my-24 overflow-hidden rounded-3xl border border-white/[0.06] bg-surface-900/30 flex items-center justify-center px-6 max-w-5xl mx-auto w-full"
+    >
+      {/* Background Giant Text */}
+      <motion.div
+        style={{ x: textX }}
+        className="absolute text-[8vw] sm:text-[10vw] font-black text-white/[0.02] tracking-[0.2em] whitespace-nowrap pointer-events-none select-none uppercase font-mono"
+      >
+        NOURIA COOKING
+      </motion.div>
+
+      {/* Radial Gradient overlay */}
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,var(--color-surface-950)_100%)] pointer-events-none" />
+
+      {/* Foreground Content */}
+      <div className="relative z-10 max-w-lg text-center">
+        <div className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6 text-xs font-semibold text-primary-300">
+          <SparklesIcon className="w-3.5 h-3.5" />
+          Interactive Parallax Showcase
+        </div>
+        <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
+          Experience depth in meal recommendations
+        </h3>
+        <p className="text-sm text-surface-400 leading-relaxed">
+          Nouria constantly matches pantry parameters, culinary time budgets, and family parameters in real-time, giving you recipes that fit perfectly.
+        </p>
+      </div>
+
+      {/* Floating Parallax Elements */}
+      {/* Element 1: Recipe Card */}
+      <motion.div
+        style={{ y: card1Y }}
+        className="absolute left-6 sm:left-16 top-1/4 z-0 hidden sm:block p-4 rounded-2xl border border-primary-500/20 bg-primary-500/[0.03] backdrop-blur-md max-w-[180px] shadow-lg shadow-black/40"
+      >
+        <span className="text-[10px] uppercase font-bold text-primary-400">Smart Recipe</span>
+        <h4 className="text-xs font-semibold text-white mt-1">Spinach Frittata</h4>
+        <p className="text-[9px] text-surface-450 mt-1">Uses expiring eggs & spinach</p>
+      </motion.div>
+
+      {/* Element 2: Grocery Checklist Item */}
+      <motion.div
+        style={{ y: card2Y }}
+        className="absolute right-6 sm:right-20 top-1/3 z-0 hidden sm:block p-4 rounded-2xl border border-white/10 bg-surface-800/80 backdrop-blur-md max-w-[160px] shadow-lg shadow-black/40"
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+            <CheckIcon className="w-2.5 h-2.5" />
+          </div>
+          <span className="text-xs font-medium text-white">Buy Garlic</span>
+        </div>
+      </motion.div>
+
+      {/* Element 3: Cooking Skill Level Tag */}
+      <motion.div
+        style={{ y: card3Y }}
+        className="absolute left-1/3 bottom-10 z-0 hidden sm:block p-3 rounded-full border border-accent-500/20 bg-accent-500/[0.04] backdrop-blur-md flex items-center gap-1.5"
+      >
+        <FireIcon className="w-3.5 h-3.5 text-accent-400" />
+        <span className="text-[10px] font-bold text-accent-400 uppercase tracking-wider">Level: Easy</span>
+      </motion.div>
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════════
+   MAIN PAGE
+   ═══════════════════════════════════════════════════════ */
+
+export default function Home() {
+  const heroRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
+  const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
+  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
+
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
+
+  const heroLine1 = "Your kitchen,".split(" ");
+  const heroLine2 = "on autopilot.".split(" ");
+
+  return (
+    <div className="relative min-h-dvh bg-surface-950 text-surface-100 overflow-x-hidden">
+      {/* Noise texture */}
+      <div
+        className="fixed inset-0 pointer-events-none z-[100] opacity-[0.012]"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+        }}
+      />
+
+      {/* ════════════════════════════════════════
+          NAVBAR
+          ════════════════════════════════════════ */}
+      <Navbar />
+
+      {/* ════════════════════════════════════════
+          HERO
+          ════════════════════════════════════════ */}
+      <section ref={heroRef} className="relative min-h-dvh flex items-center pt-28 pb-20 px-6 overflow-hidden">
+        {/* Background layers */}
+        <div className="absolute inset-0 pointer-events-none">
+          {/* Animated gradient orbs */}
+          <motion.div
+            className="absolute top-1/4 left-1/6 w-[600px] h-[600px] bg-primary-500/[0.08] rounded-full blur-[160px]"
+            animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
+            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute bottom-1/4 right-1/6 w-[500px] h-[500px] bg-emerald-400/[0.06] rounded-full blur-[140px]"
+            animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
+            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent-500/[0.03] rounded-full blur-[120px]"
+            animate={{ scale: [1, 1.2, 1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+          {/* Grid */}
+          <div
+            className="absolute inset-0 opacity-[0.025]"
+            style={{
+              backgroundImage: "linear-gradient(rgba(52,211,153,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,153,0.2) 1px, transparent 1px)",
+              backgroundSize: "80px 80px",
+            }}
+          />
+          {/* Radial fade */}
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,var(--color-surface-950)_70%)]" />
+        </div>
+
+        <motion.div
+          style={{ y: heroY, opacity: heroOpacity }}
+          className="relative z-10 mx-auto max-w-7xl w-full grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
+        >
+          {/* Left — Copy */}
+          <div className="max-w-xl">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, ease }}
+              className="inline-flex items-center gap-2.5 rounded-full border border-primary-500/20 bg-primary-500/[0.06] pl-2 pr-4 py-1.5 mb-8"
+            >
+              <span className="relative flex h-5 w-5 items-center justify-center">
+                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-primary-400/50" />
+                <span className="relative inline-flex h-2.5 w-2.5 rounded-full bg-primary-400" />
+              </span>
+              <span className="text-[13px] font-medium text-surface-300">
+                Private Beta · Limited Spots
+              </span>
+            </motion.div>
+
+            {/* Word-by-word reveal heading */}
+            <motion.h1
+              className="text-[clamp(2.8rem,6.5vw,5.2rem)] font-extrabold leading-[1.05] tracking-tight"
+              variants={wordReveal}
+              initial="hidden"
+              animate="visible"
+            >
+              <span className="block text-white" style={{ perspective: "600px" }}>
+                {heroLine1.map((word, i) => (
+                  <motion.span key={i} className="inline-block mr-[0.3em]" variants={wordChild}>
+                    {word}
+                  </motion.span>
+                ))}
+              </span>
+              <span className="block" style={{ perspective: "600px" }}>
+                {heroLine2.map((word, i) => (
+                  <motion.span
+                    key={i}
+                    className="inline-block mr-[0.3em] bg-gradient-to-r from-primary-400 via-emerald-300 to-primary-500 bg-clip-text text-transparent"
+                    variants={wordChild}
+                  >
+                    {word}
+                  </motion.span>
+                ))}
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.7, ease }}
+              className="mt-6 text-lg sm:text-xl text-surface-400 leading-relaxed max-w-lg"
+            >
+              Nouria uses AI to plan meals, build grocery lists, and guide your cooking — all tailored to
+              your household&apos;s dietary needs, skill level, and schedule.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8, duration: 0.7, ease }}
+              className="mt-10 flex flex-col sm:flex-row gap-4"
+            >
+              <Link
+                href="/apply"
+                className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-500 px-7 py-3.5 text-[15px] font-semibold text-white shadow-xl shadow-primary-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary-500/35 hover:bg-primary-400"
+              >
+                <span className="relative z-10 flex items-center gap-2.5">
+                  Apply for Early Access
+                  <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+                </span>
+              </Link>
+              <Link
+                href="#how-it-works"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-7 py-3.5 text-[15px] font-medium text-surface-300 transition-all duration-300 hover:bg-white/[0.04] hover:border-primary-500/30 hover:text-white"
+              >
+                <BoltIcon className="w-4 h-4 text-primary-400" />
+                See How It Works
+              </Link>
+            </motion.div>
+
+            {/* Social proof */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1, duration: 0.7, ease }}
+              className="mt-12 flex items-center gap-4"
+            >
+              <div className="flex -space-x-2.5">
+                {[
+                  "bg-gradient-to-br from-primary-400 to-emerald-400",
+                  "bg-gradient-to-br from-cyan-400 to-teal-400",
+                  "bg-gradient-to-br from-accent-400 to-orange-400",
+                  "bg-gradient-to-br from-violet-400 to-purple-400",
+                ].map((g, i) => (
+                  <div
+                    key={i}
+                    className={`w-9 h-9 rounded-full ${g} border-2 border-surface-950 flex items-center justify-center text-[11px] font-bold text-white`}
+                  >
+                    {["A", "K", "M", "J"][i]}
+                  </div>
+                ))}
+                <div className="w-9 h-9 rounded-full bg-surface-800 border-2 border-surface-950 flex items-center justify-center text-[10px] font-medium text-surface-300">
+                  +47
+                </div>
+              </div>
+              <div>
+                <p className="text-sm font-medium text-white">500+ beta applicants</p>
+                <div className="flex items-center gap-1 mt-0.5">
+                  {[...Array(5)].map((_, i) => (
+                    <StarIcon key={i} className="w-3 h-3 text-accent-400 fill-accent-400" />
+                  ))}
+                  <span className="text-xs text-surface-500 ml-1">from early testers</span>
+                </div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Right — Phone */}
+          <motion.div
+            variants={slideInRight}
+            initial="hidden"
+            animate="visible"
+            className="relative flex justify-center lg:justify-end"
+          >
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary-500/10 rounded-full blur-[100px]" />
+
+            {/* Rotating ring behind phone */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[360px] h-[360px] sm:w-[420px] sm:h-[420px] rounded-full border border-primary-500/10 animate-spin-slow" />
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[440px] h-[440px] sm:w-[500px] sm:h-[500px] rounded-full border border-primary-500/5 animate-spin-slow" style={{ animationDirection: "reverse", animationDuration: "30s" }} />
+
+            <PhoneMockup />
+
+            <FloatingCard className="top-12 -left-4 sm:-left-16 z-20" delay={0.2}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center">
+                  <CheckCircleIcon className="w-4 h-4 text-primary-400" />
+                </div>
+                <div>
+                  <p className="text-[11px] text-surface-400">This week</p>
+                  <p className="text-xs font-semibold text-white">2.5 hrs saved</p>
+                </div>
+              </div>
+            </FloatingCard>
+
+            <FloatingCard className="bottom-32 -left-8 sm:-left-20 z-20" delay={0.5}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-accent-500/20 flex items-center justify-center">
+                  <ShoppingCartIcon className="w-4 h-4 text-accent-400" />
+                </div>
+                <div>
+                  <p className="text-[11px] text-surface-400">Grocery list</p>
+                  <p className="text-xs font-semibold text-white">12 items · $48</p>
+                </div>
+              </div>
+            </FloatingCard>
+
+            <FloatingCard className="top-28 -right-4 sm:-right-12 z-20" delay={0.8}>
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
+                  <ChartBarIcon className="w-4 h-4 text-emerald-400" />
+                </div>
+                <div>
+                  <p className="text-[11px] text-surface-400">Waste reduced</p>
+                  <p className="text-xs font-semibold text-emerald-400">↓ 34% this month</p>
+                </div>
+              </div>
+            </FloatingCard>
+          </motion.div>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 2, duration: 1 }}
+        >
+          <span className="text-[10px] text-surface-600 uppercase tracking-[0.2em]">Scroll</span>
+          <motion.div className="w-5 h-8 rounded-full border border-surface-700 flex items-start justify-center p-1.5">
+            <motion.div
+              className="w-1 h-1 rounded-full bg-primary-400"
+              animate={{ y: [0, 12, 0] }}
+              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
+            />
+          </motion.div>
+        </motion.div>
       </section>
 
-      <section className="closing-section reveal">
-        <div className="closing-shell">
-          <span className="section-kicker">Coming soon</span>
-          <h2>Less planning. Better decisions. A kitchen that finally runs well.</h2>
-          <p>
-            Nouria is building the intelligence layer for everyday food decisions.
-          </p>
-          <div className="hero-actions closing-actions">
-            <a className="primary-button" href="/early-access">
-              Join Early Access
-              <span className="button-arrow">→</span>
-            </a>
-            <a className="secondary-button" href="/company">
-              Learn More
-            </a>
+      {/* ════════════════════════════════════════
+          INFINITE MARQUEE
+          ════════════════════════════════════════ */}
+      <section className="relative border-y border-white/[0.04] py-6 overflow-hidden">
+        <div className="flex animate-marquee whitespace-nowrap">
+          {[...marqueeItems, ...marqueeItems].map((item, i) => (
+            <span key={i} className="flex items-center gap-3 mx-8 text-sm text-surface-500">
+              <span className="w-1.5 h-1.5 rounded-full bg-primary-500/50" />
+              {item}
+            </span>
+          ))}
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          FEATURES — BENTO GRID
+          ════════════════════════════════════════ */}
+      <section id="features" className="relative py-28 sm:py-36 px-6">
+        <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/30 to-surface-950 pointer-events-none" />
+
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-20"
+          >
+            <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
+              <SparklesIcon className="w-3.5 h-3.5 text-primary-400" />
+              <span className="text-[12px] font-medium text-primary-300 uppercase tracking-wider">Features</span>
+            </motion.div>
+            <motion.h2
+              variants={fadeUp}
+              custom={1}
+              className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight leading-tight"
+            >
+              Intelligence that understands
+              <br />
+              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent">
+                your kitchen
+              </span>
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-xl mx-auto text-surface-400 text-lg leading-relaxed">
+              More than recipes. Nouria learns your life and builds around it.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr"
+          >
+            {features.map((f, i) => (
+              <motion.div
+                key={f.title}
+                variants={scaleIn}
+                custom={i}
+                className={`group relative rounded-2xl border border-white/[0.06] bg-surface-900/50 overflow-hidden transition-all duration-500 hover:border-white/[0.12] hover:bg-surface-900/80 ${f.span}`}
+              >
+                {/* Animated gradient border on hover */}
+                <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
+
+                {/* Shine effect */}
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none overflow-hidden rounded-2xl">
+                  <div className="absolute -top-1/2 -left-1/2 w-full h-full bg-gradient-to-br from-white/[0.08] to-transparent rotate-12 translate-x-full group-hover:translate-x-0 transition-transform duration-1000" />
+                </div>
+
+                <div className={`relative z-10 ${f.large ? "p-8" : "p-6"}`}>
+                  <div className={`w-11 h-11 rounded-xl ${f.iconBg} border border-white/[0.06] flex items-center justify-center mb-5 ${f.iconColor} group-hover:scale-110 transition-transform duration-500`}>
+                    <f.icon className="w-5 h-5" />
+                  </div>
+                  <h3 className={`${f.large ? "text-xl" : "text-[16px]"} font-semibold text-white mb-2`}>{f.title}</h3>
+                  <p className={`text-surface-400 ${f.large ? "text-[15px]" : "text-[13px]"} leading-relaxed`}>{f.desc}</p>
+
+                  {/* Large card extra: mini illustration */}
+                  {f.large && (
+                    <div className="mt-6 rounded-xl bg-surface-800/50 border border-white/5 p-4">
+                      <div className="flex items-center gap-3 mb-3">
+                        <CalendarDaysIcon className="w-4 h-4 text-primary-400" />
+                        <span className="text-xs font-medium text-surface-300">This Week&apos;s Plan</span>
+                      </div>
+                      <div className="grid grid-cols-7 gap-1">
+                        {["M", "T", "W", "T", "F", "S", "S"].map((d, i) => (
+                          <div key={i} className="text-center">
+                            <p className="text-[9px] text-surface-500 mb-1">{d}</p>
+                            <div className={`h-8 rounded-md ${i < 5 ? "bg-primary-500/20 border border-primary-500/20" : "bg-white/5 border border-white/5"} flex items-center justify-center`}>
+                              {i < 5 && <CheckIcon className="w-3 h-3 text-primary-400" />}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          HOW IT WORKS
+          ════════════════════════════════════════ */}
+      <section id="how-it-works" className="relative py-28 sm:py-36 px-6">
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-20"
+          >
+            <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent-500/20 bg-accent-500/[0.06] px-4 py-1.5 mb-6">
+              <BoltIcon className="w-3.5 h-3.5 text-accent-400" />
+              <span className="text-[12px] font-medium text-accent-300 uppercase tracking-wider">How It Works</span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight leading-tight">
+              From signup to dinner
+              <br />
+              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent">
+                in four steps
+              </span>
+            </motion.h2>
+          </motion.div>
+
+          <div className="relative">
+            {/* Connecting line */}
+            <div className="hidden lg:block absolute top-20 left-0 right-0 h-px">
+              <motion.div
+                className="h-full bg-gradient-to-r from-transparent via-primary-500/40 to-transparent"
+                initial={{ scaleX: 0 }}
+                whileInView={{ scaleX: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease }}
+              />
+            </div>
+
+            <motion.div
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-50px" }}
+              className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
+            >
+              {steps.map((s, i) => (
+                <motion.div
+                  key={s.title}
+                  variants={fadeUp}
+                  custom={i}
+                  className="relative text-center group"
+                >
+                  {/* Animated circle */}
+                  <div className="relative z-10 mx-auto w-16 h-16 mb-6">
+                    <motion.div
+                      className={`absolute inset-0 rounded-full bg-gradient-to-br ${s.color} opacity-20`}
+                      whileInView={{ scale: [1, 1.15, 1] }}
+                      viewport={{ once: true }}
+                      transition={{ delay: i * 0.2 + 0.5, duration: 1.5, repeat: Infinity, repeatDelay: 3 }}
+                    />
+                    <div className="relative w-full h-full rounded-full bg-surface-900 border border-white/10 flex items-center justify-center group-hover:border-primary-500/30 transition-colors duration-500">
+                      <span className={`text-lg font-bold bg-gradient-to-br ${s.color} bg-clip-text text-transparent`}>
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div className="w-10 h-10 rounded-xl bg-white/[0.04] border border-white/[0.06] flex items-center justify-center mx-auto mb-4 text-primary-400 group-hover:scale-110 transition-transform duration-500">
+                    <s.icon className="w-5 h-5" />
+                  </div>
+
+                  <h3 className="text-[15px] font-semibold text-white mb-2">{s.title}</h3>
+                  <p className="text-surface-400 text-[13px] leading-relaxed max-w-[200px] mx-auto">{s.desc}</p>
+                </motion.div>
+              ))}
+            </motion.div>
           </div>
         </div>
       </section>
 
-      <footer className="footer">
-        <div className="footer-brand">
-          <div className="brand-mark footer-mark">
-           <Image src={logo} alt="Nouria logo" fill sizes="32px" className="brand-image" />
-          </div>
-          <span className="brand-name">Nouria</span>
+      {/* Parallax Showcase Section */}
+      <ParallaxSection />
+
+      {/* ════════════════════════════════════════
+          COMPARISON — BEFORE/AFTER
+          ════════════════════════════════════════ */}
+      <section className="relative py-28 sm:py-36 px-6">
+        <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/20 to-surface-950 pointer-events-none" />
+
+        <div className="relative z-10 mx-auto max-w-5xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <motion.h2 variants={fadeUp} custom={0} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
+              The difference is
+              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent"> real</span>
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid md:grid-cols-2 gap-6"
+          >
+            {/* Before */}
+            <motion.div
+              variants={fadeUp}
+              custom={0}
+              className="rounded-2xl border border-white/[0.06] bg-surface-900/50 p-8"
+            >
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
+                  <XMarkIcon className="w-5 h-5 text-rose-400" />
+                </div>
+                <div>
+                  <p className="text-xs text-surface-500 uppercase tracking-wider">Without</p>
+                  <p className="text-lg font-semibold text-white">Nouria</p>
+                </div>
+              </div>
+              <ul className="space-y-4">
+                {comparisonBefore.map((item, i) => (
+                  <motion.li
+                    key={i}
+                    variants={fadeUp}
+                    custom={i + 1}
+                    className="flex items-start gap-3"
+                  >
+                    <div className="mt-1 w-5 h-5 rounded-full bg-rose-500/10 flex items-center justify-center flex-shrink-0">
+                      <XMarkIcon className="w-3 h-3 text-rose-400" />
+                    </div>
+                    <span className="text-surface-400 text-[14px]">{item}</span>
+                  </motion.li>
+                ))}
+              </ul>
+            </motion.div>
+
+            {/* After */}
+            <motion.div
+              variants={fadeUp}
+              custom={1}
+              className="rounded-2xl border border-primary-500/20 bg-primary-500/[0.03] p-8 relative overflow-hidden"
+            >
+              <div className="absolute top-0 right-0 w-32 h-32 bg-primary-500/10 rounded-full blur-[60px] pointer-events-none" />
+              <div className="relative">
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center">
+                    <CheckCircleIcon className="w-5 h-5 text-primary-400" />
+                  </div>
+                  <div>
+                    <p className="text-xs text-primary-400/80 uppercase tracking-wider">With</p>
+                    <p className="text-lg font-semibold text-white">Nouria</p>
+                  </div>
+                </div>
+                <ul className="space-y-4">
+                  {comparisonAfter.map((item, i) => (
+                    <motion.li
+                      key={i}
+                      variants={fadeUp}
+                      custom={i + 2}
+                      className="flex items-start gap-3"
+                    >
+                      <div className="mt-1 w-5 h-5 rounded-full bg-primary-500/10 flex items-center justify-center flex-shrink-0">
+                        <CheckIcon className="w-3 h-3 text-primary-400" />
+                      </div>
+                      <span className="text-surface-300 text-[14px]">{item}</span>
+                    </motion.li>
+                  ))}
+                </ul>
+              </div>
+            </motion.div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          STATS
+          ════════════════════════════════════════ */}
+      <section className="relative py-24 px-6 border-y border-white/[0.04]">
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, margin: "-50px" }}
+          className="mx-auto max-w-5xl grid grid-cols-2 lg:grid-cols-4 gap-4"
+        >
+          <StatCard value={2400} suffix="+" label="Recipes Generated" icon={SparklesIcon} />
+          <StatCard value={500} suffix="+" label="Beta Applicants" icon={UsersIcon} />
+          <StatCard value={34} suffix="%" label="Less Food Waste" icon={HeartIcon} />
+          <StatCard value={12} suffix="" label="Countries" icon={ChartBarIcon} />
+        </motion.div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          TESTIMONIALS
+          ════════════════════════════════════════ */}
+      <section id="testimonials" className="relative py-28 sm:py-36 px-6">
+        <div className="relative z-10 mx-auto max-w-6xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
+              <HeartIcon className="w-3.5 h-3.5 text-primary-400" />
+              <span className="text-[12px] font-medium text-primary-300 uppercase tracking-wider">Testimonials</span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
+              Loved by early
+              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent"> testers</span>
+            </motion.h2>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="grid md:grid-cols-3 gap-6"
+          >
+            {testimonials.map((t, i) => (
+              <motion.div
+                key={t.name}
+                variants={scaleIn}
+                custom={i}
+                className="group relative rounded-2xl border border-white/[0.06] bg-surface-900/50 p-7 transition-all duration-500 hover:border-white/[0.12] hover:bg-surface-900/80"
+              >
+                {/* Quote mark */}
+                <div className="absolute top-6 right-6 text-4xl font-serif text-white/[0.05] leading-none select-none">&ldquo;</div>
+
+                <div className="flex items-center gap-1 mb-4">
+                  {[...Array(t.rating)].map((_, j) => (
+                    <StarIcon key={j} className="w-4 h-4 text-accent-400 fill-accent-400" />
+                  ))}
+                </div>
+
+                <p className="text-surface-300 text-[14px] leading-relaxed mb-6">{t.text}</p>
+
+                <div className="flex items-center gap-3 pt-4 border-t border-white/5">
+                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-sm font-bold text-white`}>
+                    {t.avatar}
+                  </div>
+                  <div>
+                    <p className="text-sm font-medium text-white">{t.name}</p>
+                    <p className="text-xs text-surface-500">{t.role}</p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          FAQ
+          ════════════════════════════════════════ */}
+      <section id="faq" className="relative py-28 sm:py-36 px-6">
+        <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/20 to-surface-950 pointer-events-none" />
+
+        <div className="relative z-10 mx-auto max-w-3xl">
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+            className="text-center mb-16"
+          >
+            <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
+              <BoltIcon className="w-3.5 h-3.5 text-primary-400" />
+              <span className="text-[12px] font-medium text-primary-300 uppercase tracking-wider">FAQ</span>
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
+              Got questions?
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-4 text-surface-400 text-lg">
+              Here are the most common ones from our beta applicants.
+            </motion.p>
+          </motion.div>
+
+          <motion.div
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-50px" }}
+            className="rounded-2xl border border-white/[0.06] bg-surface-900/30 px-8"
+          >
+            {faqs.map((faq, i) => (
+              <motion.div key={i} variants={fadeUp} custom={i}>
+                <FaqItem
+                  q={faq.q}
+                  a={faq.a}
+                  isOpen={openFaq === i}
+                  onToggle={() => setOpenFaq(openFaq === i ? null : i)}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          CTA
+          ════════════════════════════════════════ */}
+      <section className="relative py-28 sm:py-36 px-6">
+        <div className="absolute inset-0 pointer-events-none overflow-hidden">
+          <motion.div
+            className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary-500/[0.08] rounded-full blur-[200px]"
+            animate={{ scale: [1, 1.1, 1] }}
+            transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
+          />
         </div>
 
-        <div className="footer-links">
-          <a href="/privacy">Privacy</a>
-          <a href="/terms">Terms</a>
-          <a href="/faq">FAQ</a>
-          <a href="/feedback">Feedback</a>
-          <a href="/report-a-bug">Report a Bug</a>
-        </div>
-
-        <div className="footer-copy">© 2026 Nouria. All rights reserved.</div>
-      </footer>
-
-      <style jsx>{`
-        :global(html) {
-          scroll-behavior: smooth;
-        }
-
-        :global(body) {
-          margin: 0;
-          background:
-            radial-gradient(circle at top left, rgba(120, 209, 153, 0.16), transparent 30%),
-            radial-gradient(circle at top right, rgba(169, 191, 255, 0.14), transparent 28%),
-            linear-gradient(180deg, #f4f8f6 0%, #edf3f0 48%, #e9efec 100%);
-          color: #08111f;
-        }
-
-        :global(*) {
-          box-sizing: border-box;
-        }
-
-        .page-shell {
-          position: relative;
-          min-height: 100vh;
-          overflow: clip;
-          color: #0e1728;
-          background: transparent;
-        }
-
-        .site-glow {
-          position: absolute;
-          border-radius: 999px;
-          pointer-events: none;
-          filter: blur(80px);
-          opacity: 0.8;
-        }
-
-        .site-glow-one {
-          left: -80px;
-          top: 80px;
-          width: 280px;
-          height: 280px;
-          background: rgba(122, 224, 159, 0.2);
-        }
-
-        .site-glow-two {
-          right: -80px;
-          top: 180px;
-          width: 320px;
-          height: 320px;
-          background: rgba(172, 189, 255, 0.18);
-        }
-
-        .site-glow-three {
-          left: 50%;
-          top: 720px;
-          width: 340px;
-          height: 160px;
-          transform: translateX(-50%);
-          background: rgba(181, 211, 196, 0.18);
-        }
-
-        .navbar {
-          position: sticky;
-          top: 16px;
-          z-index: 50;
-          width: min(1280px, calc(100% - 32px));
-          height: 76px;
-          margin: 18px auto 0;
-          padding: 0 18px 0 20px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          gap: 20px;
-          border: 1px solid rgba(255, 255, 255, 0.42);
-          background: rgba(255, 255, 255, 0.48);
-          box-shadow: 0 24px 60px rgba(20, 35, 66, 0.08);
-          backdrop-filter: blur(26px) saturate(140%);
-          -webkit-backdrop-filter: blur(26px) saturate(140%);
-          border-radius: 24px;
-        }
-
-        .brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 14px;
-          color: #10192d;
-          text-decoration: none;
-          flex-shrink: 0;
-        }
-
-        .brand-mark {
-          position: relative;
-          width: 40px;
-          height: 40px;
-          border-radius: 14px;
-          overflow: hidden;
-          background: rgba(255, 255, 255, 0.7);
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75), 0 10px 24px rgba(22, 37, 64, 0.1);
-        }
-
-        .brand-image {
-          object-fit: cover;
-        }
-
-        .brand-name {
-          font-size: 1rem;
-          font-weight: 700;
-          letter-spacing: -0.04em;
-        }
-
-        .nav-links {
-          display: flex;
-          align-items: center;
-          gap: 32px;
-        }
-
-        .nav-links a,
-        .footer-links a {
-          color: rgba(16, 25, 45, 0.72);
-          text-decoration: none;
-          font-size: 0.95rem;
-          font-weight: 500;
-          letter-spacing: -0.02em;
-          transition: color 180ms ease, transform 180ms ease;
-        }
-
-        .nav-links a:hover,
-        .footer-links a:hover {
-          color: #0d1730;
-          transform: translateY(-1px);
-        }
-
-        .nav-cta,
-        .primary-button,
-        .secondary-button {
-          height: 52px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          justify-content: center;
-          text-decoration: none;
-          transition: transform 220ms ease, box-shadow 220ms ease, background 220ms ease, border-color 220ms ease;
-          letter-spacing: -0.02em;
-          font-weight: 600;
-        }
-
-        .nav-cta,
-        .primary-button {
-          padding: 0 22px;
-          background: linear-gradient(180deg, #1d8b55 0%, #146f45 100%);
-          color: #ffffff;
-          box-shadow: 0 16px 34px rgba(26, 118, 74, 0.24);
-        }
-
-        .nav-cta:hover,
-        .primary-button:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 20px 40px rgba(26, 118, 74, 0.28);
-        }
-
-        .secondary-button {
-          padding: 0 22px;
-          color: #0f1830;
-          background: rgba(255, 255, 255, 0.42);
-          border: 1px solid rgba(255, 255, 255, 0.56);
-          box-shadow: 0 12px 30px rgba(16, 27, 49, 0.06);
-          backdrop-filter: blur(18px);
-          -webkit-backdrop-filter: blur(18px);
-        }
-
-        .secondary-button:hover {
-          transform: translateY(-2px);
-          border-color: rgba(255, 255, 255, 0.86);
-        }
-
-        .button-arrow {
-          margin-left: 10px;
-          font-size: 1.2rem;
-          line-height: 1;
-          animation: nudgeArrow 2.3s ease-in-out infinite;
-        }
-
-        .hero-section {
-          width: min(1280px, calc(100% - 32px));
-          margin: 28px auto 0;
-          padding: 40px 0 10px;
-        }
-
-        .hero-grid {
-          display: grid;
-          grid-template-columns: minmax(0, 1.02fr) minmax(0, 0.98fr);
-          gap: 34px;
-          align-items: center;
-        }
-
-        .hero-copy,
-        .hero-visual,
-        .stat-card,
-        .feature-card,
-        .system-shell,
-        .closing-shell {
-          border: 1px solid rgba(255, 255, 255, 0.42);
-          background: rgba(255, 255, 255, 0.42);
-          box-shadow: 0 24px 60px rgba(18, 31, 56, 0.08);
-          backdrop-filter: blur(26px) saturate(145%);
-          -webkit-backdrop-filter: blur(26px) saturate(145%);
-        }
-
-        .hero-copy {
-          border-radius: 34px;
-          padding: 48px;
-        }
-
-        .hero-chip,
-        .section-kicker,
-        .glass-label,
-        .feature-eyebrow,
-        .panel-label {
-          display: inline-flex;
-          align-items: center;
-          min-height: 34px;
-          padding: 0 14px;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.52);
-          border: 1px solid rgba(255, 255, 255, 0.64);
-          color: #31556d;
-          font-size: 0.84rem;
-          font-weight: 600;
-          letter-spacing: -0.02em;
-        }
-
-        .hero-copy h1 {
-          margin: 24px 0 0;
-          font-size: clamp(3.8rem, 6.3vw, 6.2rem);
-          line-height: 0.95;
-          letter-spacing: -0.08em;
-          font-weight: 700;
-          color: #091223;
-        }
-
-        .hero-copy h1 span {
-          display: block;
-          color: #1c7e51;
-        }
-
-        .hero-description {
-          margin: 24px 0 0;
-          max-width: 620px;
-          color: #4d5d73;
-          font-size: 1.08rem;
-          line-height: 1.7;
-          letter-spacing: -0.02em;
-        }
-
-        .hero-actions {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 14px;
-          margin-top: 34px;
-        }
-
-        .hero-micro {
-          display: flex;
-          flex-wrap: wrap;
-          gap: 10px;
-          margin-top: 24px;
-        }
-
-        .hero-micro span {
-          min-height: 38px;
-          padding: 0 14px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          background: rgba(255, 255, 255, 0.38);
-          border: 1px solid rgba(255, 255, 255, 0.52);
-          color: #55647a;
-          font-size: 0.9rem;
-        }
-
-        .hero-visual {
-  position: relative;
-  min-height: 720px;
-  border-radius: 34px;
-  padding: 32px;
-  overflow: hidden;
-  isolation: isolate;
-}
-
-        .visual-orb {
-          position: absolute;
-          border-radius: 999px;
-          filter: blur(70px);
-          pointer-events: none;
-        }
-
-        .visual-orb-a {
-          width: 240px;
-          height: 240px;
-          top: 50px;
-          left: -30px;
-          background: rgba(128, 229, 164, 0.22);
-        }
-
-        .visual-orb-b {
-          width: 260px;
-          height: 260px;
-          right: -30px;
-          bottom: 100px;
-          background: rgba(182, 195, 255, 0.24);
-        }
-
-        .hero-card {
-          position: absolute;
-          border-radius: 28px;
-          border: 1px solid rgba(255, 255, 255, 0.44);
-          background: rgba(255, 255, 255, 0.34);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-          box-shadow: 0 18px 44px rgba(18, 31, 56, 0.08);
-        }
-
-       .hero-card-back {
-          top: 18px;
-          right: 10px;
-          width: 292px;
-          padding: 22px;
-          z-index: 1;
-          opacity: 0.55;
-          transform: scale(0.96);
-          animation: cardDrift 7s ease-in-out infinite;
-        }
-
-        .glass-title {
-          margin-top: 14px;
-          color: #0b1630;
-          font-size: 1.22rem;
-          line-height: 1.15;
-          letter-spacing: -0.04em;
-          font-weight: 700;
-        }
-
-        .mini-grid {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-          margin-top: 18px;
-        }
-
-        .mini-tile {
-          padding: 14px;
-          border-radius: 18px;
-          background: rgba(255, 255, 255, 0.38);
-          border: 1px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .mini-tile span,
-        .phone-kicker,
-        .phone-subtitle,
-        .system-panel p,
-        .feature-card p,
-        .stat-card p,
-        .closing-shell p {
-          color: #56667c;
-        }
-
-        .mini-tile span {
-          display: block;
-          font-size: 0.8rem;
-        }
-
-        .mini-tile strong {
-          display: block;
-          margin-top: 8px;
-          color: #10203b;
-          font-size: 1rem;
-          letter-spacing: -0.03em;
-        }
-
-        .phone-shell {
-          position: absolute;
-          left: 50%;
-          top: 88px;
-          z-index: 6;
-          transform: translateX(-50%);
-          width: 360px;
-          min-height: 570px;
-          border-radius: 44px;
-          padding: 14px;
-          background: linear-gradient(180deg, rgba(23, 35, 58, 0.98) 0%, rgba(10, 18, 31, 0.98) 100%);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-          box-shadow: 0 38px 90px rgba(10, 17, 31, 0.34), inset 0 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 0 rgba(0, 0, 0, 0.2);
-          animation: phoneFloat 7s ease-in-out infinite;
-        }
-
-        .phone-topbar {
-          height: 44px;
-          padding: 0 12px;
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-        }
-
-        .phone-dots {
-          display: flex;
-          gap: 6px;
-        }
-
-        .phone-dots span {
-          width: 6px;
-          height: 6px;
-          border-radius: 999px;
-          background: rgba(255, 255, 255, 0.38);
-        }
-
-        .phone-top-pill {
-          height: 28px;
-          padding: 0 10px;
-          border-radius: 999px;
-          display: inline-flex;
-          align-items: center;
-          background: rgba(255, 255, 255, 0.08);
-          color: rgba(255, 255, 255, 0.72);
-          font-size: 0.78rem;
-        }
-
-        .phone-body {
-          position: relative;
-          min-height: 498px;
-          border-radius: 32px;
-          padding: 28px 22px 22px;
-          background: linear-gradient(180deg, #f4f8f6 0%, #edf3f0 100%);
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.55);
-          overflow: hidden;
-        }
-
-        .phone-logo-wrap {
-          display: flex;
-          justify-content: center;
-        }
-
-        .phone-logo-mark {
-          position: relative;
-          width: 76px;
-          height: 76px;
-          border-radius: 24px;
-          overflow: hidden;
-          box-shadow: 0 12px 26px rgba(17, 31, 56, 0.12);
-          background: #ffffff;
-        }
-
-        .phone-title {
-          margin: 12px 0 0;
-          color: #0c1730;
-          font-size: 1.7rem;
-          line-height: 1.06;
-          letter-spacing: -0.06em;
-          font-weight: 700;
-        }
-
-        .phone-kicker {
-          margin: 20px 0 0;
-          font-size: 0.92rem;
-          letter-spacing: -0.02em;
-        }
-
-        .phone-subtitle {
-          margin: 12px 0 0;
-          font-size: 0.95rem;
-          line-height: 1.55;
-        }
-
-        .phone-panel {
-          margin-top: 18px;
-          padding: 16px;
-          border-radius: 22px;
-          background: rgba(255, 255, 255, 0.72);
-          border: 1px solid rgba(255, 255, 255, 0.82);
-          box-shadow: 0 12px 28px rgba(15, 27, 49, 0.06);
-        }
-
-        .phone-panel strong {
-          display: block;
-          margin-top: 10px;
-          color: #0e1a31;
-          font-size: 1rem;
-          letter-spacing: -0.03em;
-        }
-
-        .phone-panel-row {
-          display: grid;
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 12px;
-        }
-
-        .compact {
-          min-height: 112px;
-        }
-
-        .floating-glass {
-  position: absolute;
-  z-index: 5;
-  min-height: 46px;
-  padding: 0 16px;
-  display: inline-flex;
-  align-items: center;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.82);
-  box-shadow: 0 10px 24px rgba(16, 29, 52, 0.06);
-  color: #4f6076;
-  font-size: 0.86rem;
-  max-width: 220px;
-}
-
-        .floating-left {
-  left: -10px;
-  top: 230px;
-  animation: floatTag 5.4s ease-in-out infinite;
-}
-
-        .floating-right {
-  right: -10px;
-  top: 380px;
-  animation: floatTag 5.9s ease-in-out infinite 0.3s;
-}
-
-       .floating-bottom {
-  left: 50%;
-  bottom: -10px;
-  transform: translateX(-50%);
-  animation: floatTagCenter 6s ease-in-out infinite 0.2s;
-}
-
-        .stats-section,
-        .feature-section,
-        .system-section,
-        .closing-section {
-          width: min(1280px, calc(100% - 32px));
-          margin: 44px auto 0;
-        }
-
-        .section-heading {
-          max-width: 860px;
-          margin: 0 auto 28px;
-          text-align: center;
-        }
-
-        .section-heading h2,
-        .system-copy h2,
-        .closing-shell h2 {
-          margin: 18px 0 0;
-          color: #0b1530;
-          font-size: clamp(2.6rem, 4.8vw, 4.5rem);
-          line-height: 0.98;
-          letter-spacing: -0.07em;
-          font-weight: 700;
-        }
-
-        .stats-grid,
-        .feature-grid {
-          display: grid;
-          gap: 20px;
-        }
-
-        .stats-grid {
-          grid-template-columns: repeat(3, minmax(0, 1fr));
-        }
-
-        .stat-card {
-          border-radius: 28px;
-          padding: 34px 28px;
-          text-align: center;
-          transition: transform 240ms ease, box-shadow 240ms ease;
-        }
-
-        .stat-card:hover,
-        .feature-card:hover,
-        .system-panel:hover {
-          transform: translateY(-4px);
-        }
-
-        .stat-value {
-          color: #1e7e52;
-          font-size: clamp(3.4rem, 5.8vw, 4.9rem);
-          line-height: 1;
-          letter-spacing: -0.08em;
-          font-weight: 700;
-        }
-
-        .stat-card h3,
-        .feature-card h3,
-        .system-panel h3 {
-          margin: 16px 0 0;
-          color: #0d1730;
-          font-size: 1.24rem;
-          line-height: 1.15;
-          letter-spacing: -0.04em;
-          font-weight: 700;
-        }
-
-        .stat-card p {
-          margin: 10px 0 0;
-          font-size: 0.98rem;
-          line-height: 1.5;
-        }
-
-        .feature-grid {
-          grid-template-columns: repeat(2, minmax(0, 1fr));
-          gap: 24px;
-        }
-
-        .feature-card {
-          border-radius: 30px;
-          padding: 32px;
-          min-height: 260px;
-          transition: transform 240ms ease, box-shadow 240ms ease;
-        }
-
-        .feature-eyebrow {
-          color: #2d5b73;
-        }
-
-        .feature-card p,
-        .system-panel p,
-        .closing-shell p,
-        .system-copy p {
-          margin: 16px 0 0;
-          font-size: 1rem;
-          line-height: 1.68;
-          letter-spacing: -0.02em;
-        }
-
-        .system-shell {
-          border-radius: 34px;
-          padding: 38px;
-          display: grid;
-          grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-          gap: 28px;
-        }
-
-        .system-copy {
-          padding: 12px 8px 12px 8px;
-        }
-
-        .system-stack {
-          display: grid;
-          gap: 16px;
-        }
-
-        .system-panel {
-          padding: 22px;
-          border-radius: 24px;
-          display: grid;
-          grid-template-columns: 72px 1fr;
-          gap: 18px;
-          background: rgba(255, 255, 255, 0.38);
-          border: 1px solid rgba(255, 255, 255, 0.48);
-          box-shadow: 0 14px 30px rgba(16, 29, 52, 0.06);
-          transition: transform 240ms ease, box-shadow 240ms ease;
-        }
-
-        .system-number {
-          width: 72px;
-          height: 72px;
-          border-radius: 22px;
-          display: grid;
-          place-items: center;
-          background: linear-gradient(180deg, rgba(255, 255, 255, 0.74) 0%, rgba(240, 247, 243, 0.8) 100%);
-          color: #1b7c50;
-          font-size: 1.1rem;
-          font-weight: 700;
-          letter-spacing: -0.04em;
-          box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.75);
-        }
-
-        .closing-shell {
-          border-radius: 34px;
-          padding: 62px 32px;
-          text-align: center;
-        }
-
-        .closing-shell p {
-          max-width: 720px;
-          margin-left: auto;
-          margin-right: auto;
-        }
-
-        .closing-actions {
-          justify-content: center;
-        }
-
-        .footer {
-          width: min(1280px, calc(100% - 32px));
-          margin: 44px auto 28px;
-          min-height: 92px;
-          padding: 24px 26px;
-          display: grid;
-          grid-template-columns: auto 1fr auto;
-          align-items: center;
-          gap: 18px;
-          border-radius: 26px;
-          border: 1px solid rgba(255, 255, 255, 0.42);
-          background: rgba(255, 255, 255, 0.38);
-          box-shadow: 0 18px 46px rgba(20, 35, 66, 0.06);
-          backdrop-filter: blur(24px);
-          -webkit-backdrop-filter: blur(24px);
-        }
-
-        .footer-brand {
-          display: inline-flex;
-          align-items: center;
-          gap: 12px;
-        }
-
-        .footer-mark {
-          width: 32px;
-          height: 32px;
-          border-radius: 11px;
-        }
-
-        .footer-links {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 16px 28px;
-        }
-
-        .footer-copy {
-          color: rgba(16, 25, 45, 0.66);
-          font-size: 0.92rem;
-          text-align: right;
-        }
-
-        .reveal {
-          opacity: 0;
-          transform: translateY(36px);
-          transition: opacity 700ms ease, transform 700ms ease;
-          will-change: transform, opacity;
-        }
-
-        .reveal.is-visible {
-          opacity: 1;
-          transform: translateY(0);
-        }
-
-        @keyframes nudgeArrow {
-          0%,
-          100% {
-            transform: translateX(0);
-          }
-          50% {
-            transform: translateX(3px);
-          }
-        }
-
-        @keyframes phoneFloat {
-          0%,
-          100% {
-            transform: translateX(-50%) translateY(0);
-          }
-          50% {
-            transform: translateX(-50%) translateY(-10px);
-          }
-        }
-
-        @keyframes floatTag {
-          0%,
-          100% {
-            transform: translateY(0);
-          }
-          50% {
-            transform: translateY(-8px);
-          }
-        }
-
-        @keyframes floatTagCenter {
-          0%,
-          100% {
-            transform: translateX(-50%) translateY(0);
-          }
-          50% {
-            transform: translateX(-50%) translateY(-8px);
-          }
-        }
-
-        @keyframes cardDrift {
-          0%,
-          100% {
-            transform: translateY(0) rotate(0deg);
-          }
-          50% {
-            transform: translateY(-6px) rotate(-1deg);
-          }
-        }
-
-        @media (max-width: 1180px) {
-          .hero-grid,
-          .system-shell {
-            grid-template-columns: 1fr;
-          }
-
-          .hero-visual {
-            min-height: 760px;
-          }
-
-          .hero-card-back {
-            right: 10px;
-          }
-        }
-
-        @media (max-width: 920px) {
-          .navbar {
-            top: 10px;
-            height: auto;
-            min-height: 76px;
-            padding-top: 14px;
-            padding-bottom: 14px;
-            flex-wrap: wrap;
-            justify-content: center;
-          }
-
-          .nav-links {
-            order: 3;
-            width: 100%;
-            justify-content: center;
-            flex-wrap: wrap;
-            gap: 16px 22px;
-          }
-
-          .stats-grid,
-          .feature-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .footer {
-            grid-template-columns: 1fr;
-            justify-items: center;
-          }
-
-          .footer-copy {
-            text-align: center;
-          }
-        }
-
-        @media (max-width: 720px) {
-          .navbar,
-          .hero-section,
-          .stats-section,
-          .feature-section,
-          .system-section,
-          .closing-section,
-          .footer {
-            width: min(100% - 18px, calc(100% - 18px));
-          }
-
-          .nav-links {
-            display: none;
-          }
-
-          .nav-cta,
-          .primary-button,
-          .secondary-button {
-            width: 100%;
-          }
-
-          .hero-copy,
-          .hero-visual,
-          .system-shell,
-          .closing-shell,
-          .stat-card,
-          .feature-card {
-            border-radius: 26px;
-          }
-
-          .hero-copy {
-            padding: 28px 22px;
-          }
-
-          .hero-copy h1 {
-            font-size: clamp(3rem, 14vw, 4.4rem);
-          }
-
-          .hero-visual {
-            min-height: 690px;
-            padding: 20px;
-          }
-
-          .phone-shell {
-            width: 304px;
-            min-height: 540px;
-            top: 108px;
-          }
-
-          .hero-card-back {
-            position: relative;
-            top: 0;
-            right: 0;
-            width: 100%;
-            margin-bottom: 18px;
-          }
-
-          .floating-left {
-            left: -6px;
-            top: 260px;
-          }
-
-          .floating-right {
-            right: -6px;
-            top: 388px;
-          }
-
-          .floating-bottom {
-            bottom: -8px;
-          }
-
-          .system-shell {
-            padding: 22px;
-          }
-
-          .system-panel {
-            grid-template-columns: 1fr;
-          }
-        }
-      `}</style>
-    </main>
+        <motion.div
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+          className="relative z-10 mx-auto max-w-3xl"
+        >
+          <motion.div
+            variants={scaleIn}
+            custom={0}
+            className="rounded-3xl border border-primary-500/20 bg-gradient-to-br from-primary-500/[0.06] to-surface-900/80 p-12 sm:p-16 text-center backdrop-blur-sm"
+          >
+            <motion.h2
+              variants={fadeUp}
+              custom={1}
+              className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight"
+            >
+              Ready to put your
+              <span className="block mt-1 bg-gradient-to-r from-primary-400 via-emerald-300 to-primary-500 bg-clip-text text-transparent">
+                kitchen on autopilot?
+              </span>
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-5 text-surface-400 text-lg leading-relaxed max-w-lg mx-auto">
+              Join the private beta. Be among the first to experience AI-powered meal planning that actually understands your life.
+            </motion.p>
+            <motion.div variants={fadeUp} custom={3} className="mt-10 flex flex-col items-center gap-4">
+              <Link
+                href="/apply"
+                className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-500 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-primary-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary-500/40 hover:bg-primary-400"
+              >
+                Get Early Access
+                <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+              </Link>
+              <p className="text-xs text-surface-500">No credit card required · Free during beta</p>
+            </motion.div>
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* ════════════════════════════════════════
+          FOOTER
+          ════════════════════════════════════════ */}
+      <Footer />
+    </div>
   );
 }

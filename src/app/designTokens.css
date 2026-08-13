@@ -1,0 +1,25 @@
+/* src/app/designTokens.css */
+:root {
+  --color-primary: hsl(210, 80%, 55%);
+  --color-secondary: hsl(340, 70%, 60%);
+  --color-background-light: hsl(0, 0%, 100%);
+  --color-background-dark: hsl(210, 10%, 10%);
+  --color-foreground-light: hsl(210, 10%, 10%);
+  --color-foreground-dark: hsl(0, 0%, 95%);
+  --glass-bg: rgba(255, 255, 255, 0.15);
+  --glass-blur: blur(10px);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-background: var(--color-background-dark);
+    --color-foreground: var(--color-foreground-dark);
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    --color-background: var(--color-background-light);
+    --color-foreground: var(--color-foreground-light);
+  }
+}
