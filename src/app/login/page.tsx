@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import Link from "next/link";
 import { auth, googleProvider, appleProvider } from "../../../lib/firebase";
 import {
   signInWithPopup,
@@ -13,6 +12,7 @@ import {
   signOut as firebaseSignOut,
   onAuthStateChanged,
   User,
+  type AuthProvider,
 } from "firebase/auth";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -28,7 +28,8 @@ import {
   TrashIcon,
 } from "@heroicons/react/24/outline";
 
-const ease = [0.25, 0.46, 0.45, 0.94] as const;
+const getErrorMessage = (error: unknown, fallback: string) =>
+  error instanceof Error && error.message ? error.message : fallback;
 
 export default function Login() {
   const [user, setUser] = useState<User | null>(null);
@@ -61,16 +62,16 @@ export default function Login() {
     return () => unsubscribe();
   }, []);
 
-  const handleSSO = async (provider: any) => {
+  const handleSSO = async (provider: AuthProvider) => {
     setLoading(true);
     setErrorMsg("");
     setInfoMsg("");
     try {
       await signInWithPopup(auth, provider);
       setInfoMsg("Successfully signed in.");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setErrorMsg(err.message || "Failed to authenticate via SSO.");
+      setErrorMsg(getErrorMessage(err, "Failed to authenticate via SSO."));
     } finally {
       setLoading(false);
     }
@@ -88,9 +89,9 @@ export default function Login() {
       } else {
         setInfoMsg("Successfully logged in.");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setErrorMsg(err.message || "Invalid credentials.");
+      setErrorMsg(getErrorMessage(err, "Invalid credentials."));
     } finally {
       setLoading(false);
     }
@@ -105,9 +106,9 @@ export default function Login() {
       const userCredential = await createUserWithEmailAndPassword(auth, email, password);
       await sendEmailVerification(userCredential.user);
       setView("verify");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setErrorMsg(err.message || "Failed to create account.");
+      setErrorMsg(getErrorMessage(err, "Failed to create account."));
     } finally {
       setLoading(false);
     }
@@ -122,9 +123,9 @@ export default function Login() {
       await sendPasswordResetEmail(auth, email);
       setInfoMsg("Password reset email sent. Please check your inbox.");
       setView("signin");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setErrorMsg(err.message || "Failed to send password reset email.");
+      setErrorMsg(getErrorMessage(err, "Failed to send password reset email."));
     } finally {
       setLoading(false);
     }
@@ -142,9 +143,9 @@ export default function Login() {
         setErrorMsg("No active session found. Please log in first.");
         setView("signin");
       }
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
-      setErrorMsg(err.message || "Failed to resend verification.");
+      setErrorMsg(getErrorMessage(err, "Failed to resend verification."));
     } finally {
       setLoading(false);
     }
@@ -155,7 +156,7 @@ export default function Login() {
       await firebaseSignOut(auth);
       setInfoMsg("Logged out successfully.");
       setView("signin");
-    } catch (err: any) {
+    } catch (err: unknown) {
       console.error(err);
     }
   };
@@ -383,6 +384,7 @@ export default function Login() {
                   {/* SSO Buttons */}
                   <div className="space-y-2.5 mb-6">
                     <button
+                      type="button"
                       onClick={() => handleSSO(googleProvider)}
                       disabled={loading}
                       className="w-full flex items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] py-3 text-sm font-semibold transition-all duration-300 cursor-pointer"
@@ -410,6 +412,7 @@ export default function Login() {
                     </button>
 
                     <button
+                      type="button"
                       onClick={() => handleSSO(appleProvider)}
                       disabled={loading}
                       className="w-full flex items-center justify-center gap-3 rounded-xl border border-white/10 bg-white/[0.02] hover:bg-white/[0.05] py-3 text-sm font-semibold transition-all duration-300 cursor-pointer"
@@ -488,7 +491,7 @@ export default function Login() {
 
                   <p className="text-center text-xs text-surface-450 mt-6">
                     Don&apos;t have an account?{" "}
-                    <button onClick={() => setView("signup")} className="text-primary-400 font-semibold hover:underline">
+                    <button type="button" onClick={() => setView("signup")} className="text-primary-400 font-semibold hover:underline">
                       Create one
                     </button>
                   </p>
@@ -566,7 +569,7 @@ export default function Login() {
 
                   <p className="text-center text-xs text-surface-450 mt-6">
                     Already have an account?{" "}
-                    <button onClick={() => setView("signin")} className="text-primary-400 font-semibold hover:underline">
+                    <button type="button" onClick={() => setView("signin")} className="text-primary-400 font-semibold hover:underline">
                       Log in
                     </button>
                   </p>
@@ -616,7 +619,7 @@ export default function Login() {
 
                   <p className="text-center text-xs text-surface-450 mt-6">
                     Remember password?{" "}
-                    <button onClick={() => setView("signin")} className="text-primary-400 font-semibold hover:underline">
+                    <button type="button" onClick={() => setView("signin")} className="text-primary-400 font-semibold hover:underline">
                       Log in
                     </button>
                   </p>
@@ -639,6 +642,7 @@ export default function Login() {
 
                   <div className="space-y-3">
                     <button
+                      type="button"
                       onClick={handleResendVerification}
                       disabled={loading}
                       className="w-full rounded-xl bg-primary-500 hover:bg-primary-400 py-3.5 text-sm font-semibold text-white transition-all duration-300"
@@ -646,6 +650,7 @@ export default function Login() {
                       Resend Verification Email
                     </button>
                     <button
+                      type="button"
                       onClick={() => setView("signin")}
                       className="w-full rounded-xl border border-white/10 hover:bg-white/5 py-3 text-sm font-semibold text-surface-300 transition-colors"
                     >

@@ -1,6 +1,5 @@
 "use client";
 
-import Link from "next/link";
 import { motion } from "framer-motion";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
@@ -33,7 +32,7 @@ const team = [
   {
     name: "Marcus Vance",
     role: "Head of AI",
-    bio: "Specialist in constraint-based recommendation models. Dedicated to making personalization allergy-safe.",
+    bio: "Specialist in constraint based recommendation models. Dedicated to making personalization allergy safe.",
     avatar: "MV",
     gradient: "from-cyan-400 to-blue-400",
   },
@@ -87,7 +86,7 @@ export default function About() {
             custom={2}
             className="text-lg sm:text-xl text-surface-400 leading-relaxed max-w-2xl mx-auto"
           >
-            At Nouria, we believe cooking shouldn't be a source of daily cognitive load. We are building the intelligent layer for your kitchen.
+            At Nouria, we believe cooking shouldn&apos;t be a source of daily cognitive load. We are building the intelligent layer for your kitchen.
           </motion.p>
         </motion.div>
 
@@ -101,7 +100,7 @@ export default function About() {
           {[
             {
               title: "Reduce Waste",
-              desc: "By matching recipes precisely to what you have in your pantry, we aim to lower household food waste to near-zero.",
+              desc: "By matching recipes precisely to what you have in your pantry, we aim to lower household food waste to near zero.",
               icon: GlobeAltIcon,
             },
             {

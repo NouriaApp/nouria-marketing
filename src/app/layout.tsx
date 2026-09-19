@@ -9,9 +9,9 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nouria — Food, handled.",
+  title: "Nouria | Food, handled.",
   description:
-    "AI-powered meal planning, grocery lists, and cooking guidance tailored to your household. Join the private beta.",
+    "AI powered meal planning, grocery lists, and cooking guidance tailored to your household. Join the private beta.",
   keywords: ["meal planning", "AI cooking", "grocery list", "recipe assistant"],
   icons: {
     icon: [
@@ -30,7 +30,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="icon" type="image/png" href="/icon.png" sizes="500x500" />
       </head>
-      <body className="min-h-dvh flex flex-col">{children}</body>
+      <body className={`${inter.className} site-light min-h-dvh flex flex-col`}>{children}</body>
     </html>
   );
 }

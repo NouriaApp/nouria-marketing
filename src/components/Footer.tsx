@@ -1,87 +1,91 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+const TALLY_URL = "https://tally.so";
+
+type FooterLink = { name: string; href: string; external?: boolean };
+type FooterColumn = { title: string; links: FooterLink[] };
+
+const socialLinks = [
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/nouriaapp/",
+    d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 3.675a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z",
+  },
+  {
+    label: "Facebook",
+    href: "https://www.facebook.com/",
+    d: "M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.024 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.972h-1.513c-1.49 0-1.956.931-1.956 1.887v2.262h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z",
+  },
+];
 
 export default function Footer() {
+  const pathname = usePathname();
+  const sectionLink = (hash: string) => (pathname === "/" ? hash : `/${hash}`);
+
+  const columns: FooterColumn[] = [
+    {
+      title: "Explore",
+      links: [
+        { name: "Product", href: sectionLink("#product") },
+        { name: "Features", href: sectionLink("#features") },
+        { name: "Vision", href: sectionLink("#vision") },
+        { name: "Contact", href: sectionLink("#contact") },
+      ],
+    },
+    {
+      title: "Access",
+      links: [{ name: "Beta Access", href: TALLY_URL, external: true }],
+    },
+    {
+      title: "Legal",
+      links: [
+        { name: "Privacy Policy", href: TALLY_URL, external: true },
+        { name: "Terms of Service", href: TALLY_URL, external: true },
+        { name: "Cookie Policy", href: TALLY_URL, external: true },
+      ],
+    },
+  ];
+
   return (
-    <footer className="border-t border-white/[0.04] py-16 px-6 bg-surface-950 mt-auto">
-      <div className="mx-auto max-w-6xl">
-        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-12 mb-16">
+    <footer className="site-footer border-t border-surface-700 py-12 px-6 bg-surface-900 mt-auto">
+      <div className="mx-auto max-w-7xl">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           <div className="lg:col-span-2">
-            <Link href="/" className="text-xl font-bold tracking-tight">
-              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent">
-                nouria
-              </span>
-            </Link>
-            <p className="mt-3 text-sm text-surface-500 leading-relaxed max-w-[280px]">
-              AI-powered meal planning for modern households. Plan smarter, cook better, waste less.
+            <Link href="/" aria-label="Nouria home" className="nouria-wordmark text-2xl tracking-tight text-primary-700">nouria</Link>
+            <p className="mt-3 text-base text-surface-400 leading-relaxed max-w-sm">
+              AI powered meal planning for modern households. Plan smarter, cook better, waste less.
             </p>
-            <div className="flex items-center gap-3 mt-5">
-              {[
-                { label: "Twitter", d: "M23 3a10.9 10.9 0 0 1-3.14 1.53 4.48 4.48 0 0 0-7.86 3v1A10.66 10.66 0 0 1 3 4s-4 9 5 13a11.64 11.64 0 0 1-7 2c9 5 20 0 20-11.5a4.5 4.5 0 0 0-.08-.83A7.72 7.72 0 0 0 23 3z" },
-                { label: "GitHub", d: "M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22" },
-                { label: "Instagram", d: "M7.5 2h9A5.5 5.5 0 0 1 22 7.5v9A5.5 5.5 0 0 1 16.5 22h-9A5.5 5.5 0 0 1 2 16.5v-9A5.5 5.5 0 0 1 7.5 2zM16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37zM17.5 6.5h.01" },
-              ].map((s) => (
-                <a key={s.label} href="#" aria-label={s.label} className="w-9 h-9 rounded-lg bg-white/[0.04] border border-white/[0.06] flex items-center justify-center text-surface-500 hover:text-primary-400 hover:border-primary-500/30 transition-all duration-300">
-                  <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" strokeLinecap="round" strokeLinejoin="round">
-                    <path d={s.d} />
-                  </svg>
+            <div className="flex items-center gap-3 mt-6">
+              {socialLinks.map((social) => (
+                <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={`Nouria on ${social.label}`} className="w-11 h-11 rounded-xl bg-white border border-surface-700 flex items-center justify-center text-surface-300 hover:text-primary-700 hover:border-primary-500/40 transition-all duration-300">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d={social.d} /></svg>
                 </a>
               ))}
             </div>
           </div>
-          {[
-            {
-              title: "Product",
-              links: [
-                { name: "Features", href: "/#features" },
-                { name: "How It Works", href: "/#how-it-works" },
-                { name: "Pricing", href: "#" },
-                { name: "Beta Access", href: "/apply" },
-              ],
-            },
-            {
-              title: "Company",
-              links: [
-                { name: "About", href: "/about" },
-                { name: "Blog", href: "#" },
-                { name: "Careers", href: "#" },
-                { name: "Contact", href: "/support" },
-              ],
-            },
-            {
-              title: "Legal",
-              links: [
-                { name: "Privacy Policy", href: "/privacy" },
-                { name: "Terms of Service", href: "/terms" },
-                { name: "Cookie Policy", href: "/cookies" },
-              ],
-            },
-          ].map((col) => (
-            <div key={col.title}>
-              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-surface-500 mb-4">
-                {col.title}
-              </p>
-              <ul className="space-y-2.5">
-                {col.links.map((link) => (
+          {columns.map((column) => (
+            <div key={column.title}>
+              <p className="text-xs font-semibold uppercase tracking-[0.15em] text-surface-400 mb-4">{column.title}</p>
+              <ul className="space-y-3">
+                {column.links.map((link) => (
                   <li key={link.name}>
-                    <Link href={link.href} className="text-sm text-surface-400 hover:text-primary-400 transition-colors duration-300">
-                      {link.name}
-                    </Link>
+                    {link.external ? (
+                      <a href={link.href} target="_blank" rel="noreferrer" className="text-base text-surface-300 hover:text-primary-700 transition-colors">{link.name}</a>
+                    ) : (
+                      <Link href={link.href} className="text-base text-surface-300 hover:text-primary-700 transition-colors">{link.name}</Link>
+                    )}
                   </li>
                 ))}
               </ul>
             </div>
           ))}
         </div>
-
-        <div className="pt-8 border-t border-white/[0.04] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs text-surface-600">
-            © {new Date().getFullYear()} Nouria Inc. All rights reserved.
-          </p>
-          <p className="text-xs text-surface-700">
-            Designed with care in San Francisco
-          </p>
+        <div className="pt-7 border-t border-surface-700 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <p className="text-sm text-surface-500">© {new Date().getFullYear()} Nouria Inc. All rights reserved.</p>
+          <p className="text-sm text-surface-500">Designed with care in San Francisco</p>
         </div>
       </div>
     </footer>

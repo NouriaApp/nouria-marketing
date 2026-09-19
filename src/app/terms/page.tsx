@@ -1,5 +1,8 @@
 "use client";
 
+/* Legal copy intentionally preserves conventional apostrophe punctuation. */
+/* eslint-disable react/no-unescaped-entities */
+
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 
@@ -23,12 +26,12 @@ export default function TermsOfService() {
           <section>
             <h2 className="text-xl font-bold text-white mb-3">2. Use License</h2>
             <p>
-              Permission is granted to temporarily download one copy of the materials (information or software) on Nouria's website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+              Permission is granted to temporarily download one copy of the materials (information or software) on Nouria&apos;s website for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
             </p>
             <ul className="list-disc pl-5 mt-2 space-y-2">
               <li>Modify or copy the materials.</li>
               <li>Use the materials for any commercial purpose, or for any public display (commercial or non-commercial).</li>
-              <li>Attempt to decompile or reverse engineer any software contained on Nouria's website.</li>
+              <li>Attempt to decompile or reverse engineer any software contained on Nouria&apos;s website.</li>
               <li>Remove any copyright or other proprietary notations from the materials.</li>
             </ul>
           </section>

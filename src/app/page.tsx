@@ -3,12 +3,10 @@
 import Link from "next/link";
 import {
   motion,
-  useScroll,
-  useTransform,
   useInView,
   AnimatePresence,
 } from "framer-motion";
-import { useRef, useEffect, useState, useCallback } from "react";
+import { useRef, useEffect, useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
 import {
@@ -52,13 +50,6 @@ const fadeUp = {
   }),
 };
 
-const fadeIn = {
-  hidden: { opacity: 0 },
-  visible: (i: number) => ({
-    opacity: 1,
-    transition: { delay: i * 0.12, duration: 0.8, ease },
-  }),
-};
 
 const scaleIn = {
   hidden: { opacity: 0, scale: 0.85, y: 20 },
@@ -127,7 +118,7 @@ const features = [
   {
     icon: SparklesIcon,
     title: "AI Meal Planning",
-    desc: "Generates personalized weekly plans that adapt in real-time to what's in your pantry, your schedule, and your family's preferences.",
+    desc: "Generates personalized weekly plans that adapt in real time to what is in your pantry, your schedule, and your family's preferences.",
     gradient: "from-emerald-500/20 to-teal-500/20",
     borderGradient: "from-emerald-500/40 to-teal-500/40",
     iconBg: "bg-emerald-500/10",
@@ -138,7 +129,7 @@ const features = [
   {
     icon: ShoppingCartIcon,
     title: "Smart Grocery Lists",
-    desc: "Auto-organized by store aisle with price estimates and quantity optimization.",
+    desc: "Organized by store aisle with price estimates and quantity optimization.",
     gradient: "from-cyan-500/20 to-blue-500/20",
     borderGradient: "from-cyan-500/40 to-blue-500/40",
     iconBg: "bg-cyan-500/10",
@@ -149,7 +140,7 @@ const features = [
   {
     icon: FireIcon,
     title: "Adaptive Cooking",
-    desc: "Step-by-step guidance that matches your skill level and available equipment.",
+    desc: "Step by step guidance that matches your skill level and available equipment.",
     gradient: "from-orange-500/20 to-amber-500/20",
     borderGradient: "from-orange-500/40 to-amber-500/40",
     iconBg: "bg-orange-500/10",
@@ -214,7 +205,7 @@ const steps = [
   {
     icon: FireIcon,
     title: "Cook with confidence",
-    desc: "Follow adaptive step-by-step guidance tailored to your kitchen.",
+    desc: "Follow adaptive step by step guidance tailored to your kitchen.",
     color: "from-orange-500 to-amber-500",
   },
 ];
@@ -233,7 +224,7 @@ const testimonials = [
     role: "Home Cook Enthusiast",
     avatar: "J",
     gradient: "from-cyan-400 to-blue-400",
-    text: "The AI actually understands my pantry. I used to waste so much food — now everything gets used and the recipes are incredible.",
+    text: "The AI actually understands my pantry. I used to waste so much food. Now everything gets used and the recipes are incredible.",
     rating: 5,
   },
   {
@@ -249,19 +240,19 @@ const testimonials = [
 const faqs = [
   {
     q: "How does Nouria handle severe food allergies?",
-    a: "Allergies are classified as hard restrictions in our system. They can never be overridden by the AI — not in meal suggestions, not in substitutions, not in grocery lists. We treat them as absolute constraints that the system is built around.",
+    a: "Allergies are classified as hard restrictions in our system. They can never be overridden by the AI in meal suggestions, substitutions, or grocery lists. We treat them as absolute constraints that the system is built around.",
   },
   {
     q: "Can multiple family members have different dietary needs?",
-    a: "Absolutely. Nouria supports per-person profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
+    a: "Absolutely. Nouria supports individual profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
   },
   {
     q: "What happens to my data?",
-    a: "Your data stays yours. We use end-to-end encryption, never sell your information to third parties, and you can export or delete your data at any time. We only use anonymized, aggregate patterns to improve the AI.",
+    a: "Your data stays yours. We use secure encryption, never sell your information to third parties, and you can export or delete your data at any time. We only use anonymized, aggregate patterns to improve the AI.",
   },
   {
     q: "Is Nouria free during the beta?",
-    a: "Yes — the private beta is completely free. Early testers will also receive a significant lifetime discount when we launch publicly. No credit card is required to join.",
+    a: "Yes. The private beta is completely free. Early testers will also receive a significant lifetime discount when we launch publicly. No credit card is required to join.",
   },
   {
     q: "How does the pantry tracking work?",
@@ -280,17 +271,17 @@ const comparisonBefore = [
 const comparisonAfter = [
   "Meals planned in seconds by AI",
   "Perfect grocery lists every time",
-  "Near-zero waste pantry management",
+  "Near zero waste pantry management",
   "Endless variety matched to your taste",
   "Dietary needs built into every meal",
 ];
 
 const marqueeItems = [
-  "AI-Powered Planning",
+  "AI Powered Planning",
   "Smart Grocery Lists",
   "Pantry Tracking",
   "Allergy Safe",
-  "Multi-Diet Support",
+  "Multiple Diet Support",
   "Receipt Scanning",
   "Nutrition Tracking",
   "Waste Reduction",
@@ -305,7 +296,7 @@ const marqueeItems = [
 /* ── Phone Mockup ── */
 function PhoneMockup() {
   return (
-    <div className="relative w-[280px] sm:w-[320px]">
+    <div className="phone-preview relative w-[280px] sm:w-[320px]">
       <div className="relative rounded-[2.5rem] border-[6px] border-surface-700/80 bg-surface-900 shadow-2xl shadow-black/50 overflow-hidden animate-pulse-glow">
         <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-surface-700/80 rounded-b-2xl z-20" />
         <div className="relative pt-8 pb-4 px-4 min-h-[520px] sm:min-h-[580px] bg-gradient-to-b from-surface-900 to-surface-950">
@@ -373,23 +364,16 @@ function PhoneMockup() {
 function FloatingCard({
   children,
   className = "",
-  delay = 0,
 }: {
   children: React.ReactNode;
   className?: string;
-  delay?: number;
 }) {
   return (
-    <motion.div
-      className={`absolute rounded-xl border border-white/10 bg-surface-800/80 backdrop-blur-xl shadow-2xl shadow-black/40 px-4 py-3 ${className}`}
-      initial={{ opacity: 0, scale: 0.7, y: 20 }}
-      animate={{ opacity: 1, scale: 1, y: 0 }}
-      transition={{ delay: delay + 1, duration: 0.7, ease }}
+    <div
+      className={`floating-card absolute rounded-xl border border-white/10 bg-surface-800/80 backdrop-blur-xl shadow-2xl shadow-black/40 px-4 py-3 ${className}`}
     >
-      <div className="animate-float" style={{ animationDelay: `${delay}s` }}>
-        {children}
-      </div>
-    </motion.div>
+      {children}
+    </div>
   );
 }
 
@@ -453,29 +437,16 @@ function FaqItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
 
 /* ── Parallax Section ── */
 function ParallaxSection() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start end", "end start"],
-  });
-
-  const textX = useTransform(scrollYProgress, [0, 1], [-150, 150]);
-  const card1Y = useTransform(scrollYProgress, [0, 1], [60, -60]);
-  const card2Y = useTransform(scrollYProgress, [0, 1], [-60, 60]);
-  const card3Y = useTransform(scrollYProgress, [0, 1], [120, -120]);
-
   return (
     <div
-      ref={containerRef}
-      className="relative h-[480px] my-24 overflow-hidden rounded-3xl border border-white/[0.06] bg-surface-900/30 flex items-center justify-center px-6 max-w-5xl mx-auto w-full"
+      className="recommendation-panel relative min-h-[360px] my-4 overflow-hidden rounded-3xl border border-white/[0.06] bg-surface-900/30 flex items-center justify-center px-6 max-w-5xl mx-auto w-[calc(100%-3rem)]"
     >
       {/* Background Giant Text */}
-      <motion.div
-        style={{ x: textX }}
-        className="absolute text-[8vw] sm:text-[10vw] font-black text-white/[0.02] tracking-[0.2em] whitespace-nowrap pointer-events-none select-none uppercase font-mono"
+      <div
+        className="absolute text-[8vw] sm:text-[10vw] font-black text-surface-50/[0.035] tracking-[0.2em] whitespace-nowrap pointer-events-none select-none uppercase"
       >
         NOURIA COOKING
-      </motion.div>
+      </div>
 
       {/* Radial Gradient overlay */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,transparent_40%,var(--color-surface-950)_100%)] pointer-events-none" />
@@ -484,30 +455,28 @@ function ParallaxSection() {
       <div className="relative z-10 max-w-lg text-center">
         <div className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6 text-xs font-semibold text-primary-300">
           <SparklesIcon className="w-3.5 h-3.5" />
-          Interactive Parallax Showcase
+          Adaptive Recommendations
         </div>
         <h3 className="text-2xl sm:text-3xl font-bold text-white mb-4">
           Experience depth in meal recommendations
         </h3>
         <p className="text-sm text-surface-400 leading-relaxed">
-          Nouria constantly matches pantry parameters, culinary time budgets, and family parameters in real-time, giving you recipes that fit perfectly.
+          Nouria matches pantry ingredients, cooking time, and household preferences in real time, giving you recipes that fit naturally into your week.
         </p>
       </div>
 
       {/* Floating Parallax Elements */}
       {/* Element 1: Recipe Card */}
-      <motion.div
-        style={{ y: card1Y }}
+      <div
         className="absolute left-6 sm:left-16 top-1/4 z-0 hidden sm:block p-4 rounded-2xl border border-primary-500/20 bg-primary-500/[0.03] backdrop-blur-md max-w-[180px] shadow-lg shadow-black/40"
       >
         <span className="text-[10px] uppercase font-bold text-primary-400">Smart Recipe</span>
         <h4 className="text-xs font-semibold text-white mt-1">Spinach Frittata</h4>
         <p className="text-[9px] text-surface-450 mt-1">Uses expiring eggs & spinach</p>
-      </motion.div>
+      </div>
 
       {/* Element 2: Grocery Checklist Item */}
-      <motion.div
-        style={{ y: card2Y }}
+      <div
         className="absolute right-6 sm:right-20 top-1/3 z-0 hidden sm:block p-4 rounded-2xl border border-white/10 bg-surface-800/80 backdrop-blur-md max-w-[160px] shadow-lg shadow-black/40"
       >
         <div className="flex items-center gap-2">
@@ -516,16 +485,15 @@ function ParallaxSection() {
           </div>
           <span className="text-xs font-medium text-white">Buy Garlic</span>
         </div>
-      </motion.div>
+      </div>
 
       {/* Element 3: Cooking Skill Level Tag */}
-      <motion.div
-        style={{ y: card3Y }}
+      <div
         className="absolute left-1/3 bottom-10 z-0 hidden sm:block p-3 rounded-full border border-accent-500/20 bg-accent-500/[0.04] backdrop-blur-md flex items-center gap-1.5"
       >
         <FireIcon className="w-3.5 h-3.5 text-accent-400" />
         <span className="text-[10px] font-bold text-accent-400 uppercase tracking-wider">Level: Easy</span>
-      </motion.div>
+      </div>
     </div>
   );
 }
@@ -535,18 +503,13 @@ function ParallaxSection() {
    ═══════════════════════════════════════════════════════ */
 
 export default function Home() {
-  const heroRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const heroY = useTransform(scrollYProgress, [0, 1], [0, 200]);
-  const heroOpacity = useTransform(scrollYProgress, [0, 0.7], [1, 0]);
-
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   const heroLine1 = "Your kitchen,".split(" ");
   const heroLine2 = "on autopilot.".split(" ");
 
   return (
-    <div className="relative min-h-dvh bg-surface-950 text-surface-100 overflow-x-hidden">
+    <div className="marketing-home relative min-h-dvh bg-surface-950 text-surface-100 overflow-x-hidden">
       {/* Noise texture */}
       <div
         className="fixed inset-0 pointer-events-none z-[100] opacity-[0.012]"
@@ -563,24 +526,18 @@ export default function Home() {
       {/* ════════════════════════════════════════
           HERO
           ════════════════════════════════════════ */}
-      <section ref={heroRef} className="relative min-h-dvh flex items-center pt-28 pb-20 px-6 overflow-hidden">
+      <section id="home" className="relative min-h-[700px] flex items-center py-12 sm:py-16 px-6 overflow-hidden">
         {/* Background layers */}
         <div className="absolute inset-0 pointer-events-none">
           {/* Animated gradient orbs */}
-          <motion.div
+          <div
             className="absolute top-1/4 left-1/6 w-[600px] h-[600px] bg-primary-500/[0.08] rounded-full blur-[160px]"
-            animate={{ x: [0, 40, 0], y: [0, -30, 0] }}
-            transition={{ duration: 12, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.div
+          <div
             className="absolute bottom-1/4 right-1/6 w-[500px] h-[500px] bg-emerald-400/[0.06] rounded-full blur-[140px]"
-            animate={{ x: [0, -30, 0], y: [0, 40, 0] }}
-            transition={{ duration: 15, repeat: Infinity, ease: "easeInOut" }}
           />
-          <motion.div
+          <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent-500/[0.03] rounded-full blur-[120px]"
-            animate={{ scale: [1, 1.2, 1] }}
-            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
           />
           {/* Grid */}
           <div
@@ -594,8 +551,7 @@ export default function Home() {
           <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_20%,var(--color-surface-950)_70%)]" />
         </div>
 
-        <motion.div
-          style={{ y: heroY, opacity: heroOpacity }}
+        <div
           className="relative z-10 mx-auto max-w-7xl w-full grid lg:grid-cols-2 gap-12 lg:gap-20 items-center"
         >
           {/* Left — Copy */}
@@ -622,7 +578,7 @@ export default function Home() {
               initial="hidden"
               animate="visible"
             >
-              <span className="block text-white" style={{ perspective: "600px" }}>
+              <span className="block text-surface-50" style={{ perspective: "600px" }}>
                 {heroLine1.map((word, i) => (
                   <motion.span key={i} className="inline-block mr-[0.3em]" variants={wordChild}>
                     {word}
@@ -648,7 +604,7 @@ export default function Home() {
               transition={{ delay: 0.6, duration: 0.7, ease }}
               className="mt-6 text-lg sm:text-xl text-surface-400 leading-relaxed max-w-lg"
             >
-              Nouria uses AI to plan meals, build grocery lists, and guide your cooking — all tailored to
+              Nouria uses AI to plan meals, build grocery lists, and guide your cooking, all tailored to
               your household&apos;s dietary needs, skill level, and schedule.
             </motion.p>
 
@@ -668,49 +624,14 @@ export default function Home() {
                 </span>
               </Link>
               <Link
-                href="#how-it-works"
+                href="#vision"
                 className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-7 py-3.5 text-[15px] font-medium text-surface-300 transition-all duration-300 hover:bg-white/[0.04] hover:border-primary-500/30 hover:text-white"
               >
                 <BoltIcon className="w-4 h-4 text-primary-400" />
-                See How It Works
+                See Our Vision
               </Link>
             </motion.div>
 
-            {/* Social proof */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1, duration: 0.7, ease }}
-              className="mt-12 flex items-center gap-4"
-            >
-              <div className="flex -space-x-2.5">
-                {[
-                  "bg-gradient-to-br from-primary-400 to-emerald-400",
-                  "bg-gradient-to-br from-cyan-400 to-teal-400",
-                  "bg-gradient-to-br from-accent-400 to-orange-400",
-                  "bg-gradient-to-br from-violet-400 to-purple-400",
-                ].map((g, i) => (
-                  <div
-                    key={i}
-                    className={`w-9 h-9 rounded-full ${g} border-2 border-surface-950 flex items-center justify-center text-[11px] font-bold text-white`}
-                  >
-                    {["A", "K", "M", "J"][i]}
-                  </div>
-                ))}
-                <div className="w-9 h-9 rounded-full bg-surface-800 border-2 border-surface-950 flex items-center justify-center text-[10px] font-medium text-surface-300">
-                  +47
-                </div>
-              </div>
-              <div>
-                <p className="text-sm font-medium text-white">500+ beta applicants</p>
-                <div className="flex items-center gap-1 mt-0.5">
-                  {[...Array(5)].map((_, i) => (
-                    <StarIcon key={i} className="w-3 h-3 text-accent-400 fill-accent-400" />
-                  ))}
-                  <span className="text-xs text-surface-500 ml-1">from early testers</span>
-                </div>
-              </div>
-            </motion.div>
           </div>
 
           {/* Right — Phone */}
@@ -718,7 +639,7 @@ export default function Home() {
             variants={slideInRight}
             initial="hidden"
             animate="visible"
-            className="relative flex justify-center lg:justify-end"
+            className="hero-showcase relative flex justify-center lg:justify-end"
           >
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-primary-500/10 rounded-full blur-[100px]" />
 
@@ -728,7 +649,7 @@ export default function Home() {
 
             <PhoneMockup />
 
-            <FloatingCard className="top-12 -left-4 sm:-left-16 z-20" delay={0.2}>
+            <FloatingCard className="top-12 -left-4 sm:-left-16 z-20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-primary-500/20 flex items-center justify-center">
                   <CheckCircleIcon className="w-4 h-4 text-primary-400" />
@@ -740,7 +661,7 @@ export default function Home() {
               </div>
             </FloatingCard>
 
-            <FloatingCard className="bottom-32 -left-8 sm:-left-20 z-20" delay={0.5}>
+            <FloatingCard className="bottom-32 -left-8 sm:-left-20 z-20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-accent-500/20 flex items-center justify-center">
                   <ShoppingCartIcon className="w-4 h-4 text-accent-400" />
@@ -752,7 +673,7 @@ export default function Home() {
               </div>
             </FloatingCard>
 
-            <FloatingCard className="top-28 -right-4 sm:-right-12 z-20" delay={0.8}>
+            <FloatingCard className="top-28 -right-4 sm:-right-12 z-20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
                   <ChartBarIcon className="w-4 h-4 text-emerald-400" />
@@ -764,24 +685,7 @@ export default function Home() {
               </div>
             </FloatingCard>
           </motion.div>
-        </motion.div>
-
-        {/* Scroll indicator */}
-        <motion.div
-          className="absolute bottom-8 left-1/2 -translate-x-1/2 flex flex-col items-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 2, duration: 1 }}
-        >
-          <span className="text-[10px] text-surface-600 uppercase tracking-[0.2em]">Scroll</span>
-          <motion.div className="w-5 h-8 rounded-full border border-surface-700 flex items-start justify-center p-1.5">
-            <motion.div
-              className="w-1 h-1 rounded-full bg-primary-400"
-              animate={{ y: [0, 12, 0] }}
-              transition={{ duration: 2.5, repeat: Infinity, ease: "easeInOut" }}
-            />
-          </motion.div>
-        </motion.div>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
@@ -798,10 +702,49 @@ export default function Home() {
         </div>
       </section>
 
+      <section id="product" className="relative px-6 py-16 sm:py-20">
+        <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-3xl border border-primary-500/15 bg-gradient-to-br from-primary-500/[0.06] to-white p-7 sm:p-10 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>
+            <motion.div variants={fadeUp} custom={0} className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-700">
+              <SparklesIcon className="h-3.5 w-3.5" />
+              Product
+            </motion.div>
+            <motion.h2 variants={fadeUp} custom={1} className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-[2.75rem]">
+              One place for every
+              <span className="block bg-gradient-to-r from-primary-500 to-emerald-400 bg-clip-text text-transparent">
+                meal decision
+              </span>
+            </motion.h2>
+            <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-xl text-lg leading-relaxed text-surface-400">
+              Nouria connects planning, pantry awareness, shopping, and cooking so your entire week feels simpler from the first idea to the final plate.
+            </motion.p>
+          </motion.div>
+
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid gap-3">
+            {[
+              { icon: CalendarDaysIcon, number: "01", title: "Plan", copy: "Personalized meals built around your schedule and household." },
+              { icon: ShoppingCartIcon, number: "02", title: "Shop", copy: "A clear grocery list organized for a faster store visit." },
+              { icon: FireIcon, number: "03", title: "Cook", copy: "Guidance that adapts to your time, tools, and confidence." },
+            ].map((item, index) => (
+              <motion.div key={item.title} variants={fadeUp} custom={index} className="grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-2xl border border-surface-700 bg-white p-5 shadow-sm">
+                <div className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary-500/10 text-primary-600">
+                  <item.icon className="h-5 w-5" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-semibold text-surface-50">{item.title}</h3>
+                  <p className="mt-1 text-sm leading-relaxed text-surface-400">{item.copy}</p>
+                </div>
+                <span className="text-xs font-semibold tracking-wider text-surface-500">{item.number}</span>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
+      </section>
+
       {/* ════════════════════════════════════════
           FEATURES — BENTO GRID
           ════════════════════════════════════════ */}
-      <section id="features" className="relative py-28 sm:py-36 px-6">
+      <section id="features" className="relative py-16 sm:py-20 px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/30 to-surface-950 pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-6xl">
@@ -809,7 +752,7 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-20"
+            className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
               <SparklesIcon className="w-3.5 h-3.5 text-primary-400" />
@@ -842,7 +785,7 @@ export default function Home() {
                 key={f.title}
                 variants={scaleIn}
                 custom={i}
-                className={`group relative rounded-2xl border border-white/[0.06] bg-surface-900/50 overflow-hidden transition-all duration-500 hover:border-white/[0.12] hover:bg-surface-900/80 ${f.span}`}
+                className={`feature-card group relative rounded-2xl border border-white/[0.06] bg-surface-900/50 overflow-hidden transition-all duration-500 hover:border-white/[0.12] hover:bg-surface-900/80 ${f.span}`}
               >
                 {/* Animated gradient border on hover */}
                 <div className={`absolute inset-0 rounded-2xl bg-gradient-to-br ${f.gradient} opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none`} />
@@ -888,17 +831,17 @@ export default function Home() {
       {/* ════════════════════════════════════════
           HOW IT WORKS
           ════════════════════════════════════════ */}
-      <section id="how-it-works" className="relative py-28 sm:py-36 px-6">
+      <section id="vision" className="relative py-16 sm:py-20 px-6">
         <div className="relative z-10 mx-auto max-w-5xl">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-20"
+            className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent-500/20 bg-accent-500/[0.06] px-4 py-1.5 mb-6">
               <BoltIcon className="w-3.5 h-3.5 text-accent-400" />
-              <span className="text-[12px] font-medium text-accent-300 uppercase tracking-wider">How It Works</span>
+              <span className="text-[12px] font-medium text-accent-700 uppercase tracking-wider">Vision</span>
             </motion.div>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight leading-tight">
               From signup to dinner
@@ -968,7 +911,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           COMPARISON — BEFORE/AFTER
           ════════════════════════════════════════ */}
-      <section className="relative py-28 sm:py-36 px-6">
+      <section className="relative py-16 sm:py-20 px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/20 to-surface-950 pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-5xl">
@@ -976,7 +919,7 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <motion.h2 variants={fadeUp} custom={0} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
               The difference is
@@ -1063,7 +1006,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           STATS
           ════════════════════════════════════════ */}
-      <section className="relative py-24 px-6 border-y border-white/[0.04]">
+      <section className="relative py-16 px-6 border-y border-white/[0.04]">
         <motion.div
           initial="hidden"
           whileInView="visible"
@@ -1071,7 +1014,7 @@ export default function Home() {
           className="mx-auto max-w-5xl grid grid-cols-2 lg:grid-cols-4 gap-4"
         >
           <StatCard value={2400} suffix="+" label="Recipes Generated" icon={SparklesIcon} />
-          <StatCard value={500} suffix="+" label="Beta Applicants" icon={UsersIcon} />
+          <StatCard value={7} suffix="" label="Days Planned Ahead" icon={CalendarDaysIcon} />
           <StatCard value={34} suffix="%" label="Less Food Waste" icon={HeartIcon} />
           <StatCard value={12} suffix="" label="Countries" icon={ChartBarIcon} />
         </motion.div>
@@ -1080,13 +1023,13 @@ export default function Home() {
       {/* ════════════════════════════════════════
           TESTIMONIALS
           ════════════════════════════════════════ */}
-      <section id="testimonials" className="relative py-28 sm:py-36 px-6">
+      <section id="testimonials" className="relative py-16 sm:py-20 px-6">
         <div className="relative z-10 mx-auto max-w-6xl">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
               <HeartIcon className="w-3.5 h-3.5 text-primary-400" />
@@ -1140,7 +1083,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           FAQ
           ════════════════════════════════════════ */}
-      <section id="faq" className="relative py-28 sm:py-36 px-6">
+      <section id="faq" className="relative py-16 sm:py-20 px-6">
         <div className="absolute inset-0 bg-gradient-to-b from-surface-950 via-surface-900/20 to-surface-950 pointer-events-none" />
 
         <div className="relative z-10 mx-auto max-w-3xl">
@@ -1148,7 +1091,7 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-16"
+            className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
               <BoltIcon className="w-3.5 h-3.5 text-primary-400" />
@@ -1185,7 +1128,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           CTA
           ════════════════════════════════════════ */}
-      <section className="relative py-28 sm:py-36 px-6">
+      <section id="contact" className="relative py-16 sm:py-20 px-6">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary-500/[0.08] rounded-full blur-[200px]"
@@ -1203,7 +1146,7 @@ export default function Home() {
           <motion.div
             variants={scaleIn}
             custom={0}
-            className="rounded-3xl border border-primary-500/20 bg-gradient-to-br from-primary-500/[0.06] to-surface-900/80 p-12 sm:p-16 text-center backdrop-blur-sm"
+            className="rounded-3xl border border-primary-500/20 bg-gradient-to-br from-primary-500/[0.06] to-surface-900/80 p-9 sm:p-12 text-center backdrop-blur-sm"
           >
             <motion.h2
               variants={fadeUp}
@@ -1216,17 +1159,17 @@ export default function Home() {
               </span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-5 text-surface-400 text-lg leading-relaxed max-w-lg mx-auto">
-              Join the private beta. Be among the first to experience AI-powered meal planning that actually understands your life.
+              Join the private beta. Be among the first to experience AI powered meal planning that actually understands your life.
             </motion.p>
             <motion.div variants={fadeUp} custom={3} className="mt-10 flex flex-col items-center gap-4">
               <Link
-                href="/apply"
+                href="mailto:support@nouria.app"
                 className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-500 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-primary-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary-500/40 hover:bg-primary-400"
               >
-                Get Early Access
+                Contact Nouria
                 <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <p className="text-xs text-surface-500">No credit card required · Free during beta</p>
+              <p className="text-sm text-surface-500">Questions, partnerships, or feedback? We&apos;d love to hear from you.</p>
             </motion.div>
           </motion.div>
         </motion.div>
