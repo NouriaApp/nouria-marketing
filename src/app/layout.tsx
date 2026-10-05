@@ -9,7 +9,7 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "Nouria | Food, handled.",
+  title: "ampleat | Food, handled.",
   description:
     "AI powered meal planning, grocery lists, and cooking guidance tailored to your household. Join the private beta.",
   keywords: ["meal planning", "AI cooking", "grocery list", "recipe assistant"],

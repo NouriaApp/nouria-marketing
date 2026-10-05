@@ -54,13 +54,13 @@ export default function Footer() {
       <div className="mx-auto max-w-7xl">
         <div className="grid sm:grid-cols-2 lg:grid-cols-5 gap-10 mb-12">
           <div className="lg:col-span-2">
-            <Link href="/" aria-label="Nouria home" className="nouria-wordmark text-2xl tracking-tight text-primary-700">nouria</Link>
+            <Link href="/" aria-label="ampleat home" className="ampleat-wordmark text-2xl tracking-tight text-primary-700">ampleat</Link>
             <p className="mt-3 text-base text-surface-400 leading-relaxed max-w-sm">
               AI powered meal planning for modern households. Plan smarter, cook better, waste less.
             </p>
             <div className="flex items-center gap-3 mt-6">
               {socialLinks.map((social) => (
-                <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={`Nouria on ${social.label}`} className="w-11 h-11 rounded-xl bg-white border border-surface-700 flex items-center justify-center text-surface-300 hover:text-primary-700 hover:border-primary-500/40 transition-all duration-300">
+                <a key={social.label} href={social.href} target="_blank" rel="noreferrer" aria-label={`ampleat on ${social.label}`} className="w-11 h-11 rounded-xl bg-white border border-surface-700 flex items-center justify-center text-surface-300 hover:text-primary-700 hover:border-primary-500/40 transition-all duration-300">
                   <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true"><path d={social.d} /></svg>
                 </a>
               ))}
@@ -84,7 +84,7 @@ export default function Footer() {
           ))}
         </div>
         <div className="pt-7 border-t border-surface-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-surface-500">© {new Date().getFullYear()} Nouria Inc. All rights reserved.</p>
+          <p className="text-sm text-surface-500">© {new Date().getFullYear()} ampleat Inc. All rights reserved.</p>
           <p className="text-sm text-surface-500">Designed with care in San Francisco</p>
         </div>
       </div>

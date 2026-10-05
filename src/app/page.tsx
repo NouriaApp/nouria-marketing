@@ -119,10 +119,10 @@ const features = [
     icon: SparklesIcon,
     title: "AI Meal Planning",
     desc: "Generates personalized weekly plans that adapt in real time to what is in your pantry, your schedule, and your family's preferences.",
-    gradient: "from-emerald-500/20 to-teal-500/20",
-    borderGradient: "from-emerald-500/40 to-teal-500/40",
-    iconBg: "bg-emerald-500/10",
-    iconColor: "text-emerald-400",
+    gradient: "from-supporting-500/20 to-supporting-500/20",
+    borderGradient: "from-supporting-500/40 to-supporting-500/40",
+    iconBg: "bg-supporting-500/10",
+    iconColor: "text-supporting-400",
     span: "sm:col-span-2 lg:col-span-2 lg:row-span-2",
     large: true,
   },
@@ -130,10 +130,10 @@ const features = [
     icon: ShoppingCartIcon,
     title: "Smart Grocery Lists",
     desc: "Organized by store aisle with price estimates and quantity optimization.",
-    gradient: "from-cyan-500/20 to-blue-500/20",
-    borderGradient: "from-cyan-500/40 to-blue-500/40",
-    iconBg: "bg-cyan-500/10",
-    iconColor: "text-cyan-400",
+    gradient: "from-primary-500/20 to-primary-500/20",
+    borderGradient: "from-primary-500/40 to-primary-500/40",
+    iconBg: "bg-primary-500/10",
+    iconColor: "text-primary-400",
     span: "",
     large: false,
   },
@@ -141,10 +141,10 @@ const features = [
     icon: FireIcon,
     title: "Adaptive Cooking",
     desc: "Step by step guidance that matches your skill level and available equipment.",
-    gradient: "from-orange-500/20 to-amber-500/20",
-    borderGradient: "from-orange-500/40 to-amber-500/40",
-    iconBg: "bg-orange-500/10",
-    iconColor: "text-orange-400",
+    gradient: "from-accent-500/20 to-accent-500/20",
+    borderGradient: "from-accent-500/40 to-accent-500/40",
+    iconBg: "bg-accent-500/10",
+    iconColor: "text-accent-400",
     span: "",
     large: false,
   },
@@ -152,10 +152,10 @@ const features = [
     icon: ShieldCheckIcon,
     title: "Dietary Intelligence",
     desc: "Hard restrictions like allergies are never overridden. Soft preferences flex intelligently around your life.",
-    gradient: "from-rose-500/20 to-pink-500/20",
-    borderGradient: "from-rose-500/40 to-pink-500/40",
-    iconBg: "bg-rose-500/10",
-    iconColor: "text-rose-400",
+    gradient: "from-primary-500/20 to-primary-500/20",
+    borderGradient: "from-primary-500/40 to-primary-500/40",
+    iconBg: "bg-primary-500/10",
+    iconColor: "text-primary-400",
     span: "",
     large: false,
   },
@@ -163,10 +163,10 @@ const features = [
     icon: CubeIcon,
     title: "Pantry Tracking",
     desc: "Scan receipts, track inventory, reduce waste, and save money automatically.",
-    gradient: "from-violet-500/20 to-purple-500/20",
-    borderGradient: "from-violet-500/40 to-purple-500/40",
-    iconBg: "bg-violet-500/10",
-    iconColor: "text-violet-400",
+    gradient: "from-primary-500/20 to-primary-500/20",
+    borderGradient: "from-primary-500/40 to-primary-500/40",
+    iconBg: "bg-primary-500/10",
+    iconColor: "text-primary-400",
     span: "",
     large: false,
   },
@@ -174,8 +174,8 @@ const features = [
     icon: UsersIcon,
     title: "Built for Households",
     desc: "Scales portions automatically. Handles picky eaters, multiple diets, and varying schedules with ease.",
-    gradient: "from-primary-500/20 to-emerald-500/20",
-    borderGradient: "from-primary-500/40 to-emerald-500/40",
+    gradient: "from-primary-500/20 to-supporting-500/20",
+    borderGradient: "from-primary-500/40 to-supporting-500/40",
     iconBg: "bg-primary-500/10",
     iconColor: "text-primary-400",
     span: "sm:col-span-2 lg:col-span-1",
@@ -188,25 +188,25 @@ const steps = [
     icon: UsersIcon,
     title: "Create your profile",
     desc: "Household size, skill level, equipment, dietary needs and restrictions.",
-    color: "from-emerald-500 to-teal-500",
+    color: "from-supporting-500 to-supporting-500",
   },
   {
     icon: CalendarDaysIcon,
     title: "Set preferences",
     desc: "Favorite cuisines, time budget, disliked ingredients, and cooking goals.",
-    color: "from-cyan-500 to-blue-500",
+    color: "from-primary-500 to-primary-500",
   },
   {
     icon: SparklesIcon,
     title: "Get your plan",
     desc: "AI generates a personalized weekly meal plan with grocery lists included.",
-    color: "from-violet-500 to-purple-500",
+    color: "from-primary-500 to-primary-500",
   },
   {
     icon: FireIcon,
     title: "Cook with confidence",
     desc: "Follow adaptive step by step guidance tailored to your kitchen.",
-    color: "from-orange-500 to-amber-500",
+    color: "from-accent-500 to-accent-500",
   },
 ];
 
@@ -215,15 +215,15 @@ const testimonials = [
     name: "Sarah M.",
     role: "Busy Mom of 3",
     avatar: "S",
-    gradient: "from-emerald-400 to-teal-400",
-    text: "Nouria transformed our family dinners. My kids are actually excited about meals now, and I've cut our grocery bill by 25%.",
+    gradient: "from-supporting-400 to-supporting-400",
+    text: "ampleat transformed our family dinners. My kids are actually excited about meals now, and I've cut our grocery bill by 25%.",
     rating: 5,
   },
   {
     name: "James L.",
     role: "Home Cook Enthusiast",
     avatar: "J",
-    gradient: "from-cyan-400 to-blue-400",
+    gradient: "from-primary-400 to-primary-400",
     text: "The AI actually understands my pantry. I used to waste so much food. Now everything gets used and the recipes are incredible.",
     rating: 5,
   },
@@ -231,27 +231,27 @@ const testimonials = [
     name: "Priya K.",
     role: "Dietary Restrictions",
     avatar: "P",
-    gradient: "from-violet-400 to-purple-400",
-    text: "As someone with celiac disease, I finally feel safe. Nouria never suggests anything with gluten and the meals are genuinely delicious.",
+    gradient: "from-primary-400 to-primary-400",
+    text: "As someone with celiac disease, I finally feel safe. ampleat never suggests anything with gluten and the meals are genuinely delicious.",
     rating: 5,
   },
 ];
 
 const faqs = [
   {
-    q: "How does Nouria handle severe food allergies?",
+    q: "How does ampleat handle severe food allergies?",
     a: "Allergies are classified as hard restrictions in our system. They can never be overridden by the AI in meal suggestions, substitutions, or grocery lists. We treat them as absolute constraints that the system is built around.",
   },
   {
     q: "Can multiple family members have different dietary needs?",
-    a: "Absolutely. Nouria supports individual profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
+    a: "Absolutely. ampleat supports individual profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
   },
   {
     q: "What happens to my data?",
     a: "Your data stays yours. We use secure encryption, never sell your information to third parties, and you can export or delete your data at any time. We only use anonymized, aggregate patterns to improve the AI.",
   },
   {
-    q: "Is Nouria free during the beta?",
+    q: "Is ampleat free during the beta?",
     a: "Yes. The private beta is completely free. Early testers will also receive a significant lifetime discount when we launch publicly. No credit card is required to join.",
   },
   {
@@ -298,7 +298,7 @@ function PhoneMockup() {
   return (
     <div className="phone-preview relative w-[280px] sm:w-[320px]">
       <div className="relative rounded-[2.5rem] border-[6px] border-surface-700/80 bg-surface-900 shadow-2xl shadow-black/50 overflow-hidden animate-pulse-glow">
-        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-28 h-6 bg-surface-700/80 rounded-b-2xl z-20" />
+        <div aria-hidden="true" className="dynamic-island absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-20" />
         <div className="relative pt-8 pb-4 px-4 min-h-[520px] sm:min-h-[580px] bg-gradient-to-b from-surface-900 to-surface-950">
           <div className="flex items-center justify-between text-[10px] text-surface-400 px-1 mb-5">
             <span>9:41</span>
@@ -338,7 +338,7 @@ function PhoneMockup() {
           {[
             { time: "8:00 AM", meal: "Greek Yogurt Bowl", color: "bg-accent-400" },
             { time: "12:30 PM", meal: "Mediterranean Wrap", color: "bg-primary-400" },
-            { time: "7:00 PM", meal: "Salmon Teriyaki", color: "bg-cyan-400" },
+            { time: "7:00 PM", meal: "Salmon Teriyaki", color: "bg-primary-400" },
           ].map((m) => (
             <div key={m.meal} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
               <div className={`w-1 h-8 rounded-full ${m.color}`} />
@@ -443,9 +443,9 @@ function ParallaxSection() {
     >
       {/* Background Giant Text */}
       <div
-        className="absolute text-[8vw] sm:text-[10vw] font-black text-surface-50/[0.035] tracking-[0.2em] whitespace-nowrap pointer-events-none select-none uppercase"
+        className="absolute text-[8vw] sm:text-[10vw] font-black text-surface-50/[0.035] tracking-[0.2em] whitespace-nowrap pointer-events-none select-none"
       >
-        NOURIA COOKING
+        ampleat COOKING
       </div>
 
       {/* Radial Gradient overlay */}
@@ -461,7 +461,7 @@ function ParallaxSection() {
           Experience depth in meal recommendations
         </h3>
         <p className="text-sm text-surface-400 leading-relaxed">
-          Nouria matches pantry ingredients, cooking time, and household preferences in real time, giving you recipes that fit naturally into your week.
+          ampleat matches pantry ingredients, cooking time, and household preferences in real time, giving you recipes that fit naturally into your week.
         </p>
       </div>
 
@@ -480,7 +480,7 @@ function ParallaxSection() {
         className="absolute right-6 sm:right-20 top-1/3 z-0 hidden sm:block p-4 rounded-2xl border border-white/10 bg-surface-800/80 backdrop-blur-md max-w-[160px] shadow-lg shadow-black/40"
       >
         <div className="flex items-center gap-2">
-          <div className="w-4 h-4 rounded-full bg-emerald-500/20 flex items-center justify-center text-emerald-400">
+          <div className="w-4 h-4 rounded-full bg-supporting-500/20 flex items-center justify-center text-supporting-400">
             <CheckIcon className="w-2.5 h-2.5" />
           </div>
           <span className="text-xs font-medium text-white">Buy Garlic</span>
@@ -534,7 +534,7 @@ export default function Home() {
             className="absolute top-1/4 left-1/6 w-[600px] h-[600px] bg-primary-500/[0.08] rounded-full blur-[160px]"
           />
           <div
-            className="absolute bottom-1/4 right-1/6 w-[500px] h-[500px] bg-emerald-400/[0.06] rounded-full blur-[140px]"
+            className="absolute bottom-1/4 right-1/6 w-[500px] h-[500px] bg-supporting-400/[0.06] rounded-full blur-[140px]"
           />
           <div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] bg-accent-500/[0.03] rounded-full blur-[120px]"
@@ -543,7 +543,7 @@ export default function Home() {
           <div
             className="absolute inset-0 opacity-[0.025]"
             style={{
-              backgroundImage: "linear-gradient(rgba(52,211,153,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(52,211,153,0.2) 1px, transparent 1px)",
+              backgroundImage: "linear-gradient(rgba(84,45,62,0.2) 1px, transparent 1px), linear-gradient(90deg, rgba(84,45,62,0.2) 1px, transparent 1px)",
               backgroundSize: "80px 80px",
             }}
           />
@@ -589,7 +589,7 @@ export default function Home() {
                 {heroLine2.map((word, i) => (
                   <motion.span
                     key={i}
-                    className="inline-block mr-[0.3em] bg-gradient-to-r from-primary-400 via-emerald-300 to-primary-500 bg-clip-text text-transparent"
+                    className="inline-block mr-[0.3em] bg-gradient-to-r from-primary-400 via-supporting-300 to-primary-500 bg-clip-text text-transparent"
                     variants={wordChild}
                   >
                     {word}
@@ -604,7 +604,7 @@ export default function Home() {
               transition={{ delay: 0.6, duration: 0.7, ease }}
               className="mt-6 text-lg sm:text-xl text-surface-400 leading-relaxed max-w-lg"
             >
-              Nouria uses AI to plan meals, build grocery lists, and guide your cooking, all tailored to
+              ampleat uses AI to plan meals, build grocery lists, and guide your cooking, all tailored to
               your household&apos;s dietary needs, skill level, and schedule.
             </motion.p>
 
@@ -675,12 +675,12 @@ export default function Home() {
 
             <FloatingCard className="top-28 -right-4 sm:-right-12 z-20">
               <div className="flex items-center gap-2.5">
-                <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-                  <ChartBarIcon className="w-4 h-4 text-emerald-400" />
+                <div className="w-8 h-8 rounded-lg bg-supporting-500/20 flex items-center justify-center">
+                  <ChartBarIcon className="w-4 h-4 text-supporting-400" />
                 </div>
                 <div>
                   <p className="text-[11px] text-surface-400">Waste reduced</p>
-                  <p className="text-xs font-semibold text-emerald-400">↓ 34% this month</p>
+                  <p className="text-xs font-semibold text-supporting-400">↓ 34% this month</p>
                 </div>
               </div>
             </FloatingCard>
@@ -711,12 +711,12 @@ export default function Home() {
             </motion.div>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl font-bold leading-tight tracking-tight sm:text-4xl md:text-[2.75rem]">
               One place for every
-              <span className="block bg-gradient-to-r from-primary-500 to-emerald-400 bg-clip-text text-transparent">
+              <span className="block bg-gradient-to-r from-primary-500 to-supporting-400 bg-clip-text text-transparent">
                 meal decision
               </span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-xl text-lg leading-relaxed text-surface-400">
-              Nouria connects planning, pantry awareness, shopping, and cooking so your entire week feels simpler from the first idea to the final plate.
+              ampleat connects planning, pantry awareness, shopping, and cooking so your entire week feels simpler from the first idea to the final plate.
             </motion.p>
           </motion.div>
 
@@ -765,12 +765,12 @@ export default function Home() {
             >
               Intelligence that understands
               <br />
-              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent">
                 your kitchen
               </span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-xl mx-auto text-surface-400 text-lg leading-relaxed">
-              More than recipes. Nouria learns your life and builds around it.
+              More than recipes. ampleat learns your life and builds around it.
             </motion.p>
           </motion.div>
 
@@ -846,7 +846,7 @@ export default function Home() {
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight leading-tight">
               From signup to dinner
               <br />
-              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent">
+              <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent">
                 in four steps
               </span>
             </motion.h2>
@@ -923,7 +923,7 @@ export default function Home() {
           >
             <motion.h2 variants={fadeUp} custom={0} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
               The difference is
-              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent"> real</span>
+              <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent"> real</span>
             </motion.h2>
           </motion.div>
 
@@ -940,12 +940,12 @@ export default function Home() {
               className="rounded-2xl border border-white/[0.06] bg-surface-900/50 p-8"
             >
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-rose-500/10 flex items-center justify-center">
-                  <XMarkIcon className="w-5 h-5 text-rose-400" />
+                <div className="w-10 h-10 rounded-xl bg-primary-500/10 flex items-center justify-center">
+                  <XMarkIcon className="w-5 h-5 text-primary-400" />
                 </div>
                 <div>
                   <p className="text-xs text-surface-500 uppercase tracking-wider">Without</p>
-                  <p className="text-lg font-semibold text-white">Nouria</p>
+                  <p className="text-lg font-semibold text-white">ampleat</p>
                 </div>
               </div>
               <ul className="space-y-4">
@@ -956,8 +956,8 @@ export default function Home() {
                     custom={i + 1}
                     className="flex items-start gap-3"
                   >
-                    <div className="mt-1 w-5 h-5 rounded-full bg-rose-500/10 flex items-center justify-center flex-shrink-0">
-                      <XMarkIcon className="w-3 h-3 text-rose-400" />
+                    <div className="mt-1 w-5 h-5 rounded-full bg-primary-500/10 flex items-center justify-center flex-shrink-0">
+                      <XMarkIcon className="w-3 h-3 text-primary-400" />
                     </div>
                     <span className="text-surface-400 text-[14px]">{item}</span>
                   </motion.li>
@@ -979,7 +979,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-xs text-primary-400/80 uppercase tracking-wider">With</p>
-                    <p className="text-lg font-semibold text-white">Nouria</p>
+                    <p className="text-lg font-semibold text-white">ampleat</p>
                   </div>
                 </div>
                 <ul className="space-y-4">
@@ -1037,7 +1037,7 @@ export default function Home() {
             </motion.div>
             <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
               Loved by early
-              <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent"> testers</span>
+              <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent"> testers</span>
             </motion.h2>
           </motion.div>
 
@@ -1154,7 +1154,7 @@ export default function Home() {
               className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight"
             >
               Ready to put your
-              <span className="block mt-1 bg-gradient-to-r from-primary-400 via-emerald-300 to-primary-500 bg-clip-text text-transparent">
+              <span className="block mt-1 bg-gradient-to-r from-primary-400 via-supporting-300 to-primary-500 bg-clip-text text-transparent">
                 kitchen on autopilot?
               </span>
             </motion.h2>
@@ -1166,7 +1166,7 @@ export default function Home() {
                 href="mailto:support@nouria.app"
                 className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-500 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-primary-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary-500/40 hover:bg-primary-400"
               >
-                Contact Nouria
+                Contact ampleat
                 <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
               <p className="text-sm text-surface-500">Questions, partnerships, or feedback? We&apos;d love to hear from you.</p>

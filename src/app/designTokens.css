@@ -1,12 +1,12 @@
 /* src/app/designTokens.css */
 :root {
-  --color-primary: hsl(210, 80%, 55%);
-  --color-secondary: hsl(340, 70%, 60%);
-  --color-background-light: hsl(0, 0%, 100%);
-  --color-background-dark: hsl(210, 10%, 10%);
-  --color-foreground-light: hsl(210, 10%, 10%);
-  --color-foreground-dark: hsl(0, 0%, 95%);
-  --glass-bg: rgba(255, 255, 255, 0.15);
+  --color-primary: #542D3E;
+  --color-secondary: #F7F1E7;
+  --color-background-light: #F7F1E7;
+  --color-background-dark: #171614;
+  --color-foreground-light: #171614;
+  --color-foreground-dark: #F7F1E7;
+  --glass-bg: rgba(247, 241, 231, 0.15);
   --glass-blur: blur(10px);
 }
 

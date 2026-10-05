@@ -188,7 +188,7 @@ export default function Login() {
     setTimeout(() => {
       setGeneratingRecipe(false);
       if (selected.length === 0) {
-        setAiRecipe("Please check at least one ingredient in your pantry above to let Nouria build a recipe!");
+        setAiRecipe("Please check at least one ingredient in your pantry above to let ampleat build a recipe!");
         return;
       }
       setAiRecipe(
@@ -206,7 +206,7 @@ export default function Login() {
       {/* ── Background Orbs ── */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary-500/[0.04] rounded-full blur-[160px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-emerald-400/[0.03] rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-supporting-400/[0.03] rounded-full blur-[140px]" />
       </div>
 
       <main className="flex-grow pt-32 pb-24 px-6 relative z-10 max-w-4xl mx-auto w-full flex flex-col justify-center">
@@ -290,7 +290,7 @@ export default function Login() {
                   <h2 className="text-lg font-bold text-white">AI Recipe Assistant</h2>
                 </div>
                 <p className="text-xs text-surface-450 mb-6">
-                  Select ingredients in your pantry on the left, then click below to let Nouria build an adaptive recipe card automatically.
+                  Select ingredients in your pantry on the left, then click below to let ampleat build an adaptive recipe card automatically.
                 </p>
 
                 <button

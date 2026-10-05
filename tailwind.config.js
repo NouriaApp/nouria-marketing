@@ -10,8 +10,8 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: "hsl(210, 80%, 55%)",
-        secondary: "hsl(340, 70%, 60%)",
+        primary: "#542D3E",
+        secondary: "#F7F1E7",
       },
       backdropBlur: {
         xs: "2px",

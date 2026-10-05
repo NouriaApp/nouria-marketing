@@ -27,21 +27,21 @@ const team = [
     role: "Founder & CEO",
     bio: "Former food systems researcher and software engineer passionate about making healthy home cooking effortless.",
     avatar: "AC",
-    gradient: "from-emerald-400 to-teal-400",
+    gradient: "from-supporting-400 to-supporting-400",
   },
   {
     name: "Marcus Vance",
     role: "Head of AI",
     bio: "Specialist in constraint based recommendation models. Dedicated to making personalization allergy safe.",
     avatar: "MV",
-    gradient: "from-cyan-400 to-blue-400",
+    gradient: "from-primary-400 to-primary-400",
   },
   {
     name: "Elena Rostova",
     role: "Lead Culinary Advisor",
     bio: "Professional chef of 12 years. Ensures our adaptive recipe guides feel natural and delicious.",
     avatar: "ER",
-    gradient: "from-violet-400 to-purple-400",
+    gradient: "from-primary-400 to-primary-400",
   },
 ];
 
@@ -53,7 +53,7 @@ export default function About() {
       {/* ── Background Elements ── */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/4 w-[600px] h-[600px] bg-primary-500/[0.04] rounded-full blur-[160px]" />
-        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-emerald-400/[0.03] rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-supporting-400/[0.03] rounded-full blur-[140px]" />
       </div>
 
       <main className="flex-grow pt-32 pb-24 px-6 relative z-10 max-w-5xl mx-auto w-full">
@@ -77,7 +77,7 @@ export default function About() {
             className="text-4xl sm:text-5xl md:text-6xl font-extrabold tracking-tight leading-tight mb-6"
           >
             Food,{" "}
-            <span className="bg-gradient-to-r from-primary-400 via-emerald-300 to-primary-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-primary-400 via-supporting-300 to-primary-500 bg-clip-text text-transparent">
               handled.
             </span>
           </motion.h1>
@@ -86,7 +86,7 @@ export default function About() {
             custom={2}
             className="text-lg sm:text-xl text-surface-400 leading-relaxed max-w-2xl mx-auto"
           >
-            At Nouria, we believe cooking shouldn&apos;t be a source of daily cognitive load. We are building the intelligent layer for your kitchen.
+            At ampleat, we believe cooking shouldn&apos;t be a source of daily cognitive load. We are building the intelligent layer for your kitchen.
           </motion.p>
         </motion.div>
 
@@ -110,7 +110,7 @@ export default function About() {
             },
             {
               title: "Simplify Living",
-              desc: "Decision fatigue is real. Nouria takes over the planning, scaling, and prep so you can focus on enjoying the meal.",
+              desc: "Decision fatigue is real. ampleat takes over the planning, scaling, and prep so you can focus on enjoying the meal.",
               icon: UserGroupIcon,
             },
           ].map((item, i) => (

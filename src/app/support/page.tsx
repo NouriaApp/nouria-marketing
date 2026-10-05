@@ -12,7 +12,7 @@ export default function Support() {
   const [formData, setFormData] = useState({ name: "", email: "", topic: "general", message: "" });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`Nouria ${formData.topic} inquiry from ${formData.name}`);
+    const subject = encodeURIComponent(`ampleat ${formData.topic} inquiry from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
     window.location.href = `mailto:support@nouria.app?subject=${subject}&body=${body}`;
   };
@@ -24,7 +24,7 @@ export default function Support() {
       {/* ── Background Elements ── */}
       <div className="absolute inset-0 pointer-events-none">
         <div className="absolute top-1/4 left-1/3 w-[600px] h-[600px] bg-primary-500/[0.04] rounded-full blur-[160px]" />
-        <div className="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-emerald-400/[0.03] rounded-full blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/3 w-[500px] h-[500px] bg-supporting-400/[0.03] rounded-full blur-[140px]" />
       </div>
 
       <main className="flex-grow pt-32 pb-16 px-6 relative z-10 max-w-5xl mx-auto w-full">

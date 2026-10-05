@@ -32,9 +32,9 @@ export default function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-6 py-4">
         <nav aria-label="Primary navigation" className="relative flex items-center justify-between rounded-2xl border border-white/[0.06] bg-surface-950/90 backdrop-blur-2xl px-5 sm:px-6 py-3 shadow-lg shadow-surface-200/10">
-          <Link href="/" aria-label="Nouria home" className="text-xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary-400 to-emerald-300 bg-clip-text text-transparent">
-              nouria
+          <Link href="/" aria-label="ampleat home" className="text-xl font-bold tracking-tight">
+            <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent">
+              ampleat
             </span>
           </Link>
           <div className="hidden md:flex items-center gap-8">
