@@ -1163,7 +1163,7 @@ export default function Home() {
             </motion.p>
             <motion.div variants={fadeUp} custom={3} className="mt-10 flex flex-col items-center gap-4">
               <Link
-                href="mailto:support@nouria.app"
+                href="mailto:hello@ampleat.com"
                 className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-500 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-primary-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary-500/40 hover:bg-primary-400"
               >
                 Contact ampleat

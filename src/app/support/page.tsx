@@ -14,7 +14,7 @@ export default function Support() {
     e.preventDefault();
     const subject = encodeURIComponent(`ampleat ${formData.topic} inquiry from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
-    window.location.href = `mailto:support@nouria.app?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:hello@ampleat.com?subject=${subject}&body=${body}`;
   };
 
   return (
@@ -47,8 +47,8 @@ export default function Support() {
               <div>
                 <h3 className="font-semibold text-white text-sm">Email Support</h3>
                 <p className="text-xs text-surface-450 mt-1">Direct support for beta users.</p>
-                <a href="mailto:support@nouria.app" className="text-xs text-primary-400 hover:underline mt-2 block font-medium">
-                  support@nouria.app
+                <a href="mailto:hello@ampleat.com" className="text-xs text-primary-400 hover:underline mt-2 block font-medium">
+                  hello@ampleat.com
                 </a>
               </div>
             </div>

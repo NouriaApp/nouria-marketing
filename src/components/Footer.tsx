@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-const TALLY_URL = "https://tally.so";
+const TALLY_URL = "https://tally.so/r/7RN1L6";
 
 type FooterLink = { name: string; href: string; external?: boolean };
 type FooterColumn = { title: string; links: FooterLink[] };
@@ -11,12 +11,12 @@ type FooterColumn = { title: string; links: FooterLink[] };
 const socialLinks = [
   {
     label: "Instagram",
-    href: "https://www.instagram.com/nouriaapp/",
+    href: "https://www.instagram.com/ampleatapp/",
     d: "M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0 3.675a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z",
   },
   {
     label: "Facebook",
-    href: "https://www.facebook.com/",
+    href: "https://facebook.com/",
     d: "M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.414c0-3.024 1.792-4.697 4.533-4.697 1.312 0 2.686.235 2.686.235v2.972h-1.513c-1.49 0-1.956.931-1.956 1.887v2.262h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z",
   },
 ];
@@ -42,9 +42,9 @@ export default function Footer() {
     {
       title: "Legal",
       links: [
-        { name: "Privacy Policy", href: TALLY_URL, external: true },
-        { name: "Terms of Service", href: TALLY_URL, external: true },
-        { name: "Cookie Policy", href: TALLY_URL, external: true },
+        { name: "Privacy Policy", href: "/privacy-policy" },
+        { name: "Terms of Service", href: "/terms-of-service" },
+        { name: "Cookie Policy", href: "/cookies" },
       ],
     },
   ];
@@ -84,8 +84,8 @@ export default function Footer() {
           ))}
         </div>
         <div className="pt-7 border-t border-surface-700 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-surface-500">© {new Date().getFullYear()} ampleat Inc. All rights reserved.</p>
-          <p className="text-sm text-surface-500">Designed with care in San Francisco</p>
+          <p className="text-sm text-surface-500">© {new Date().getFullYear()} ampleat. All rights reserved.</p>
+          <p className="text-sm text-surface-500">Food, handled.</p>
         </div>
       </div>
     </footer>

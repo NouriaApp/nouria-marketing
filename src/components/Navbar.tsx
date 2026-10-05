@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
@@ -32,10 +33,15 @@ export default function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-6 py-4">
         <nav aria-label="Primary navigation" className="relative flex items-center justify-between rounded-2xl border border-white/[0.06] bg-surface-950/90 backdrop-blur-2xl px-5 sm:px-6 py-3 shadow-lg shadow-surface-200/10">
-          <Link href="/" aria-label="ampleat home" className="text-xl font-bold tracking-tight">
-            <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent">
-              ampleat
-            </span>
+          <Link href="/" aria-label="ampleat home" className="inline-flex shrink-0 rounded-[12px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-700">
+            <Image
+              src="/ampleat-logo-colored.png"
+              alt="Ampleat"
+              width={48}
+              height={48}
+              preload
+              className="h-12 w-12 rounded-[12px] object-cover"
+            />
           </Link>
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
