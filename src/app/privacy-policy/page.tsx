@@ -3,7 +3,7 @@ import LegalDocument from "@/components/LegalDocument";
 import { privacySections } from "@/content/legal";
 
 export const metadata: Metadata = {
-  title: "Privacy Policy | ampleat",
+  title: "Privacy Policy | Ampleat",
   description: "Ampleat’s privacy policy for its website and private beta kitchen-assistant app.",
 };
 

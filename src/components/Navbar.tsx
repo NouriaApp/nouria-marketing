@@ -33,7 +33,7 @@ export default function Navbar() {
     >
       <div className="mx-auto max-w-7xl px-6 py-4">
         <nav aria-label="Primary navigation" className="relative flex items-center justify-between rounded-2xl border border-white/[0.06] bg-surface-950/90 backdrop-blur-2xl px-5 sm:px-6 py-3 shadow-lg shadow-surface-200/10">
-          <Link href="/" aria-label="ampleat home" className="inline-flex shrink-0 rounded-[12px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-700">
+          <Link href="/" aria-label="Ampleat home" className="inline-flex shrink-0 rounded-[12px] focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary-700">
             <Image
               src="/ampleat-logo-colored.png"
               alt="Ampleat"

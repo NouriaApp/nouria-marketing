@@ -1,32 +1,34 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import {
   motion,
-  useInView,
   AnimatePresence,
+  MotionConfig,
 } from "framer-motion";
-import { useRef, useEffect, useState } from "react";
+import { useState } from "react";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import DinnerPlayground from "@/components/DinnerPlayground";
+import FridgeRescue from "@/components/FridgeRescue";
+import AmpleatVision from "@/components/AmpleatVision";
+import ScrollEffects from "@/components/ScrollEffects";
 import {
   SparklesIcon,
-  ShoppingCartIcon,
+  CameraIcon,
   FireIcon,
   ShieldCheckIcon,
   CubeIcon,
   UsersIcon,
   ArrowRightIcon,
   CalendarDaysIcon,
-  ClockIcon,
   BoltIcon,
   CheckCircleIcon,
   ChartBarIcon,
-  HeartIcon,
   ChevronDownIcon,
   XMarkIcon,
   CheckIcon,
-  StarIcon,
 } from "@heroicons/react/24/outline";
 
 /* ═══════════════════════════════════════════════════════
@@ -46,18 +48,18 @@ const fadeUp = {
   visible: (i: number) => ({
     opacity: 1,
     y: 0,
-    transition: { delay: i * 0.1, duration: 0.7, ease },
+    transition: { delay: i * 0.1, duration: 0.45, ease },
   }),
 };
 
 
 const scaleIn = {
-  hidden: { opacity: 0, scale: 0.85, y: 20 },
+  hidden: { opacity: 0, scale: 0.98, y: 18 },
   visible: (i: number) => ({
     opacity: 1,
     scale: 1,
     y: 0,
-    transition: { delay: i * 0.08, duration: 0.6, ease },
+    transition: { delay: i * 0.08, duration: 0.45, ease },
   }),
 };
 
@@ -86,31 +88,6 @@ const wordChild = {
 };
 
 /* ═══════════════════════════════════════════════════════
-   ANIMATED COUNTER HOOK
-   ═══════════════════════════════════════════════════════ */
-
-function useCounter(target: number, duration = 2200) {
-  const [count, setCount] = useState(0);
-  const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-80px" });
-
-  useEffect(() => {
-    if (!isInView) return;
-    const startTime = Date.now();
-    const tick = () => {
-      const elapsed = Date.now() - startTime;
-      const progress = Math.min(elapsed / duration, 1);
-      const eased = 1 - Math.pow(1 - progress, 4);
-      setCount(Math.round(eased * target));
-      if (progress < 1) requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-  }, [isInView, target, duration]);
-
-  return { count, ref };
-}
-
-/* ═══════════════════════════════════════════════════════
    DATA
    ═══════════════════════════════════════════════════════ */
 
@@ -118,7 +95,7 @@ const features = [
   {
     icon: SparklesIcon,
     title: "AI Meal Planning",
-    desc: "Generates personalized weekly plans that adapt in real time to what is in your pantry, your schedule, and your family's preferences.",
+    desc: "Builds personalized meal plans around your pantry, expiring ingredients, available time, and household preferences.",
     gradient: "from-supporting-500/20 to-supporting-500/20",
     borderGradient: "from-supporting-500/40 to-supporting-500/40",
     iconBg: "bg-supporting-500/10",
@@ -127,9 +104,9 @@ const features = [
     large: true,
   },
   {
-    icon: ShoppingCartIcon,
-    title: "Smart Grocery Lists",
-    desc: "Organized by store aisle with price estimates and quantity optimization.",
+    icon: CameraIcon,
+    title: "AmpleatVision",
+    desc: "Scan ingredients, shelves, and spice labels. Review detected pantry details before saving.",
     gradient: "from-primary-500/20 to-primary-500/20",
     borderGradient: "from-primary-500/40 to-primary-500/40",
     iconBg: "bg-primary-500/10",
@@ -162,7 +139,7 @@ const features = [
   {
     icon: CubeIcon,
     title: "Pantry Tracking",
-    desc: "Scan receipts, track inventory, reduce waste, and save money automatically.",
+    desc: "Track quantities, storage locations, expiry estimates, and low-stock alerts across your kitchen.",
     gradient: "from-primary-500/20 to-primary-500/20",
     borderGradient: "from-primary-500/40 to-primary-500/40",
     iconBg: "bg-primary-500/10",
@@ -199,7 +176,7 @@ const steps = [
   {
     icon: SparklesIcon,
     title: "Get your plan",
-    desc: "AI generates a personalized weekly meal plan with grocery lists included.",
+    desc: "AI suggests meals from your pantry, expiring ingredients, available time, and household needs.",
     color: "from-primary-500 to-primary-500",
   },
   {
@@ -210,59 +187,32 @@ const steps = [
   },
 ];
 
-const testimonials = [
-  {
-    name: "Sarah M.",
-    role: "Busy Mom of 3",
-    avatar: "S",
-    gradient: "from-supporting-400 to-supporting-400",
-    text: "ampleat transformed our family dinners. My kids are actually excited about meals now, and I've cut our grocery bill by 25%.",
-    rating: 5,
-  },
-  {
-    name: "James L.",
-    role: "Home Cook Enthusiast",
-    avatar: "J",
-    gradient: "from-primary-400 to-primary-400",
-    text: "The AI actually understands my pantry. I used to waste so much food. Now everything gets used and the recipes are incredible.",
-    rating: 5,
-  },
-  {
-    name: "Priya K.",
-    role: "Dietary Restrictions",
-    avatar: "P",
-    gradient: "from-primary-400 to-primary-400",
-    text: "As someone with celiac disease, I finally feel safe. ampleat never suggests anything with gluten and the meals are genuinely delicious.",
-    rating: 5,
-  },
-];
-
 const faqs = [
   {
-    q: "How does ampleat handle severe food allergies?",
-    a: "Allergies are classified as hard restrictions in our system. They can never be overridden by the AI in meal suggestions, substitutions, or grocery lists. We treat them as absolute constraints that the system is built around.",
+    q: "How does Ampleat handle severe food allergies?",
+    a: "Allergies are classified as hard restrictions in our system. They can never be overridden by the AI in meal suggestions or substitutions. We treat them as absolute constraints that the system is built around.",
   },
   {
     q: "Can multiple family members have different dietary needs?",
-    a: "Absolutely. ampleat supports individual profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
+    a: "Absolutely. Ampleat supports individual profiles within a household. If one person is vegan and another is keto, the system will find meals that work for everyone or intelligently suggest modular recipes with easy swaps.",
   },
   {
     q: "What happens to my data?",
     a: "Your data stays yours. We use secure encryption, never sell your information to third parties, and you can export or delete your data at any time. We only use anonymized, aggregate patterns to improve the AI.",
   },
   {
-    q: "Is ampleat free during the beta?",
+    q: "Is Ampleat free during the beta?",
     a: "Yes. The private beta is completely free. Early testers will also receive a significant lifetime discount when we launch publicly. No credit card is required to join.",
   },
   {
     q: "How does the pantry tracking work?",
-    a: "You can scan grocery receipts with your phone camera, manually add items, or connect to supported grocery delivery services. The system tracks expiration dates and suggests recipes that use items before they go bad.",
+    a: "Add items manually, scan barcodes or receipts, or use AmpleatVision to scan ingredients and shelves. Review and confirm detected details before saving. Expiry estimates and low-stock alerts help you use what you have.",
   },
 ];
 
 const comparisonBefore = [
   "30+ minutes deciding what to cook",
-  "Forgotten ingredients at the store",
+  "Forgotten ingredients in the fridge",
   "Food waste piling up weekly",
   "Same 5 recipes on rotation",
   "Dietary needs as an afterthought",
@@ -270,7 +220,7 @@ const comparisonBefore = [
 
 const comparisonAfter = [
   "Meals planned in seconds by AI",
-  "Perfect grocery lists every time",
+  "Meal ideas built from your actual pantry",
   "Near zero waste pantry management",
   "Endless variety matched to your taste",
   "Dietary needs built into every meal",
@@ -278,12 +228,12 @@ const comparisonAfter = [
 
 const marqueeItems = [
   "AI Powered Planning",
-  "Smart Grocery Lists",
+  "AmpleatVision",
   "Pantry Tracking",
-  "Allergy Safe",
+  "Dietary Rules",
   "Multiple Diet Support",
   "Receipt Scanning",
-  "Nutrition Tracking",
+  "Expiration Tracking",
   "Waste Reduction",
   "Skill Adaptation",
   "Household Scaling",
@@ -299,62 +249,7 @@ function PhoneMockup() {
     <div className="phone-preview relative w-[280px] sm:w-[320px]">
       <div className="relative rounded-[2.5rem] border-[6px] border-surface-700/80 bg-surface-900 shadow-2xl shadow-black/50 overflow-hidden animate-pulse-glow">
         <div aria-hidden="true" className="dynamic-island absolute top-3 left-1/2 -translate-x-1/2 w-24 h-6 bg-black rounded-full z-20" />
-        <div className="relative pt-8 pb-4 px-4 min-h-[520px] sm:min-h-[580px] bg-gradient-to-b from-surface-900 to-surface-950">
-          <div className="flex items-center justify-between text-[10px] text-surface-400 px-1 mb-5">
-            <span>9:41</span>
-            <div className="flex gap-1 items-center">
-              <div className="w-3.5 h-2 rounded-sm border border-surface-400 relative">
-                <div className="absolute inset-[1px] right-[2px] bg-primary-400 rounded-[1px]" />
-              </div>
-            </div>
-          </div>
-          <div className="mb-5">
-            <p className="text-surface-400 text-xs">Good evening</p>
-            <p className="text-white text-base font-semibold">Sarah</p>
-          </div>
-          <div className="rounded-2xl bg-gradient-to-br from-primary-500/20 to-primary-800/10 border border-primary-500/20 p-3.5 mb-3">
-            <div className="flex items-center justify-between mb-2">
-              <span className="text-[10px] font-medium text-primary-300 uppercase tracking-wider">Tonight&apos;s Dinner</span>
-              <span className="text-[10px] text-surface-400 flex items-center gap-1">
-                <ClockIcon className="w-3 h-3" /> 35 min
-              </span>
-            </div>
-            <p className="text-white text-sm font-semibold mb-1">Lemon Herb Chicken</p>
-            <p className="text-surface-400 text-[11px] mb-3">with roasted vegetables & quinoa</p>
-            <div className="flex gap-2">
-              {[
-                { label: "Cal", val: "480" },
-                { label: "Protein", val: "38g" },
-                { label: "Carbs", val: "42g" },
-              ].map((n) => (
-                <div key={n.label} className="flex-1 rounded-lg bg-white/5 px-2 py-1.5 text-center">
-                  <p className="text-[9px] text-surface-400">{n.label}</p>
-                  <p className="text-[11px] font-semibold text-white">{n.val}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-          <p className="text-surface-400 text-[10px] font-medium uppercase tracking-wider mb-2 mt-4">Tomorrow</p>
-          {[
-            { time: "8:00 AM", meal: "Greek Yogurt Bowl", color: "bg-accent-400" },
-            { time: "12:30 PM", meal: "Mediterranean Wrap", color: "bg-primary-400" },
-            { time: "7:00 PM", meal: "Salmon Teriyaki", color: "bg-primary-400" },
-          ].map((m) => (
-            <div key={m.meal} className="flex items-center gap-3 py-2 border-b border-white/5 last:border-0">
-              <div className={`w-1 h-8 rounded-full ${m.color}`} />
-              <div className="flex-1">
-                <p className="text-white text-xs font-medium">{m.meal}</p>
-                <p className="text-surface-500 text-[10px]">{m.time}</p>
-              </div>
-              <ArrowRightIcon className="w-3 h-3 text-surface-500" />
-            </div>
-          ))}
-          <div className="absolute bottom-0 left-0 right-0 flex items-center justify-around py-3 px-6 border-t border-white/5 bg-surface-950/80 backdrop-blur-sm">
-            {[CalendarDaysIcon, ShoppingCartIcon, SparklesIcon, UsersIcon].map((Icon, i) => (
-              <Icon key={i} className={`w-5 h-5 ${i === 0 ? "text-primary-400" : "text-surface-500"}`} />
-            ))}
-          </div>
-        </div>
+        <Image src="/ampleat-home-screen.png" alt="Ampleat app home screen showing a coconut chickpea curry meal, pantry coverage, and cooking controls" width={1206} height={2622} sizes="(max-width: 767px) 242px, 272px" preload className="phone-screen" />
       </div>
     </div>
   );
@@ -374,27 +269,6 @@ function FloatingCard({
     >
       {children}
     </div>
-  );
-}
-
-/* ── Stat Card ── */
-function StatCard({ value, suffix, label, icon: Icon }: { value: number; suffix: string; label: string; icon: React.ElementType }) {
-  const { count, ref } = useCounter(value);
-  return (
-    <motion.div
-      ref={ref}
-      variants={scaleIn}
-      className="relative text-center px-6 py-8 rounded-2xl border border-white/[0.06] bg-white/[0.02] group hover:bg-white/[0.04] transition-all duration-500"
-    >
-      <div className="w-12 h-12 rounded-xl bg-primary-500/10 flex items-center justify-center mx-auto mb-4 text-primary-400 group-hover:scale-110 transition-transform duration-500">
-        <Icon className="w-6 h-6" />
-      </div>
-      <p className="text-4xl sm:text-5xl font-extrabold tracking-tight bg-gradient-to-b from-white to-surface-400 bg-clip-text text-transparent">
-        {count}
-        {suffix}
-      </p>
-      <p className="mt-2 text-sm text-surface-400">{label}</p>
-    </motion.div>
   );
 }
 
@@ -438,14 +312,15 @@ function FaqItem({ q, a, isOpen, onToggle }: { q: string; a: string; isOpen: boo
 /* ── Parallax Section ── */
 function ParallaxSection() {
   return (
+    <section className="relative px-6" aria-label="Meal recommendations">
     <div
-      className="recommendation-panel relative min-h-[360px] my-4 overflow-hidden rounded-3xl border border-white/[0.06] bg-surface-900/30 flex items-center justify-center px-6 max-w-5xl mx-auto w-[calc(100%-3rem)]"
+      className="recommendation-panel relative min-h-[360px] overflow-hidden rounded-3xl border border-white/[0.06] bg-surface-900/30 flex items-center justify-center px-6 max-w-5xl mx-auto w-full"
     >
       {/* Background Giant Text */}
       <div
         className="absolute text-[8vw] sm:text-[10vw] font-black text-surface-50/[0.035] tracking-[0.2em] whitespace-nowrap pointer-events-none select-none"
       >
-        ampleat COOKING
+        Ampleat COOKING
       </div>
 
       {/* Radial Gradient overlay */}
@@ -461,7 +336,7 @@ function ParallaxSection() {
           Experience depth in meal recommendations
         </h3>
         <p className="text-sm text-surface-400 leading-relaxed">
-          ampleat matches pantry ingredients, cooking time, and household preferences in real time, giving you recipes that fit naturally into your week.
+          Ampleat matches pantry ingredients, cooking time, and household preferences in real time, giving you recipes that fit naturally into your week.
         </p>
       </div>
 
@@ -475,7 +350,7 @@ function ParallaxSection() {
         <p className="text-[9px] text-surface-450 mt-1">Uses expiring eggs & spinach</p>
       </div>
 
-      {/* Element 2: Grocery Checklist Item */}
+      {/* Element 2: Pantry Item */}
       <div
         className="absolute right-6 sm:right-20 top-1/3 z-0 hidden sm:block p-4 rounded-2xl border border-white/10 bg-surface-800/80 backdrop-blur-md max-w-[160px] shadow-lg shadow-black/40"
       >
@@ -483,7 +358,7 @@ function ParallaxSection() {
           <div className="w-4 h-4 rounded-full bg-supporting-500/20 flex items-center justify-center text-supporting-400">
             <CheckIcon className="w-2.5 h-2.5" />
           </div>
-          <span className="text-xs font-medium text-white">Buy Garlic</span>
+          <span className="text-xs font-medium text-white">Garlic in pantry</span>
         </div>
       </div>
 
@@ -495,6 +370,7 @@ function ParallaxSection() {
         <span className="text-[10px] font-bold text-accent-400 uppercase tracking-wider">Level: Easy</span>
       </div>
     </div>
+    </section>
   );
 }
 
@@ -505,11 +381,14 @@ function ParallaxSection() {
 export default function Home() {
   const [openFaq, setOpenFaq] = useState<number | null>(null);
 
-  const heroLine1 = "Your kitchen,".split(" ");
-  const heroLine2 = "on autopilot.".split(" ");
+  const heroLine1 = "Make more of".split(" ");
+  const heroLine2 = "what you have".split(" ");
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="marketing-home relative min-h-dvh bg-surface-950 text-surface-100 overflow-x-hidden">
+      <ScrollEffects />
+
       {/* Noise texture */}
       <div
         className="fixed inset-0 pointer-events-none z-[100] opacity-[0.012]"
@@ -559,7 +438,7 @@ export default function Home() {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, ease }}
+              transition={{ duration: 0.45, ease }}
               className="inline-flex items-center gap-2.5 rounded-full border border-primary-500/20 bg-primary-500/[0.06] pl-2 pr-4 py-1.5 mb-8"
             >
               <span className="relative flex h-5 w-5 items-center justify-center">
@@ -585,7 +464,7 @@ export default function Home() {
                   </motion.span>
                 ))}
               </span>
-              <span className="block" style={{ perspective: "600px" }}>
+              <span className="block hero-emphasis" style={{ perspective: "600px" }}>
                 {heroLine2.map((word, i) => (
                   <motion.span
                     key={i}
@@ -601,17 +480,17 @@ export default function Home() {
             <motion.p
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.6, duration: 0.7, ease }}
+              transition={{ delay: 0.6, duration: 0.45, ease }}
               className="mt-6 text-lg sm:text-xl text-surface-400 leading-relaxed max-w-lg"
             >
-              ampleat uses AI to plan meals, build grocery lists, and guide your cooking, all tailored to
+              Ampleat uses AI to plan meals from your pantry, prioritize expiring food, and guide your cooking, all tailored to
               your household&apos;s dietary needs, skill level, and schedule.
             </motion.p>
 
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.8, duration: 0.7, ease }}
+              transition={{ delay: 0.8, duration: 0.45, ease }}
               className="mt-10 flex flex-col sm:flex-row gap-4"
             >
               <Link
@@ -625,7 +504,7 @@ export default function Home() {
               </Link>
               <Link
                 href="#vision"
-                className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-7 py-3.5 text-[15px] font-medium text-surface-300 transition-all duration-300 hover:bg-white/[0.04] hover:border-primary-500/30 hover:text-white"
+                className="group inline-flex items-center justify-center gap-2 rounded-xl border border-white/10 px-7 py-3.5 text-[15px] font-medium text-surface-300 transition-all duration-300 hover:bg-white/[0.04] hover:border-primary-500/30 hover:text-primary-500"
               >
                 <BoltIcon className="w-4 h-4 text-primary-400" />
                 See Our Vision
@@ -664,11 +543,11 @@ export default function Home() {
             <FloatingCard className="bottom-32 -left-8 sm:-left-20 z-20">
               <div className="flex items-center gap-2.5">
                 <div className="w-8 h-8 rounded-lg bg-accent-500/20 flex items-center justify-center">
-                  <ShoppingCartIcon className="w-4 h-4 text-accent-400" />
+                  <CubeIcon className="w-4 h-4 text-accent-400" />
                 </div>
                 <div>
-                  <p className="text-[11px] text-surface-400">Grocery list</p>
-                  <p className="text-xs font-semibold text-white">12 items · $48</p>
+                  <p className="text-[11px] text-surface-400">Pantry ready</p>
+                  <p className="text-xs font-semibold text-white">Use what you have</p>
                 </div>
               </div>
             </FloatingCard>
@@ -704,7 +583,7 @@ export default function Home() {
 
       <section id="product" className="relative px-6 py-16 sm:py-20">
         <div className="mx-auto grid max-w-6xl items-center gap-10 rounded-3xl border border-primary-500/15 bg-gradient-to-br from-primary-500/[0.06] to-white p-7 sm:p-10 lg:grid-cols-[0.9fr_1.1fr] lg:p-12">
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-80px" }}>
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "100px" }}>
             <motion.div variants={fadeUp} custom={0} className="mb-5 inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-white px-4 py-1.5 text-xs font-semibold uppercase tracking-wider text-primary-700">
               <SparklesIcon className="h-3.5 w-3.5" />
               Product
@@ -716,14 +595,14 @@ export default function Home() {
               </span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-xl text-lg leading-relaxed text-surface-400">
-              ampleat connects planning, pantry awareness, shopping, and cooking so your entire week feels simpler from the first idea to the final plate.
+              Ampleat starts with your actual kitchen: scan what you have, find a meal that fits, and cook with step-by-step guidance.
             </motion.p>
           </motion.div>
 
-          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "-50px" }} className="grid gap-3">
+          <motion.div initial="hidden" whileInView="visible" viewport={{ once: true, margin: "100px" }} className="grid gap-3">
             {[
               { icon: CalendarDaysIcon, number: "01", title: "Plan", copy: "Personalized meals built around your schedule and household." },
-              { icon: ShoppingCartIcon, number: "02", title: "Shop", copy: "A clear grocery list organized for a faster store visit." },
+              { icon: CameraIcon, number: "02", title: "Scan", copy: "Add ingredients, shelves, and spices to your pantry with AmpleatVision." },
               { icon: FireIcon, number: "03", title: "Cook", copy: "Guidance that adapts to your time, tools, and confidence." },
             ].map((item, index) => (
               <motion.div key={item.title} variants={fadeUp} custom={index} className="grid grid-cols-[auto_1fr_auto] items-center gap-4 rounded-2xl border border-surface-700 bg-white p-5 shadow-sm">
@@ -741,6 +620,8 @@ export default function Home() {
         </div>
       </section>
 
+      <AmpleatVision />
+
       {/* ════════════════════════════════════════
           FEATURES — BENTO GRID
           ════════════════════════════════════════ */}
@@ -751,7 +632,7 @@ export default function Home() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
@@ -770,14 +651,14 @@ export default function Home() {
               </span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-5 max-w-xl mx-auto text-surface-400 text-lg leading-relaxed">
-              More than recipes. ampleat learns your life and builds around it.
+              More than recipes. Ampleat learns your life and builds around it.
             </motion.p>
           </motion.div>
 
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 auto-rows-fr"
           >
             {features.map((f, i) => (
@@ -836,7 +717,7 @@ export default function Home() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-accent-500/20 bg-accent-500/[0.06] px-4 py-1.5 mb-6">
@@ -867,7 +748,7 @@ export default function Home() {
             <motion.div
               initial="hidden"
               whileInView="visible"
-              viewport={{ once: true, margin: "-50px" }}
+              viewport={{ once: true, margin: "100px" }}
               className="grid sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-6"
             >
               {steps.map((s, i) => (
@@ -905,8 +786,12 @@ export default function Home() {
         </div>
       </section>
 
+      <DinnerPlayground />
+
       {/* Parallax Showcase Section */}
       <ParallaxSection />
+
+      <FridgeRescue />
 
       {/* ════════════════════════════════════════
           COMPARISON — BEFORE/AFTER
@@ -918,7 +803,7 @@ export default function Home() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="text-center mb-10"
           >
             <motion.h2 variants={fadeUp} custom={0} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
@@ -930,7 +815,7 @@ export default function Home() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="grid md:grid-cols-2 gap-6"
           >
             {/* Before */}
@@ -945,7 +830,7 @@ export default function Home() {
                 </div>
                 <div>
                   <p className="text-xs text-surface-500 uppercase tracking-wider">Without</p>
-                  <p className="text-lg font-semibold text-white">ampleat</p>
+                  <p className="text-lg font-semibold text-white">Ampleat</p>
                 </div>
               </div>
               <ul className="space-y-4">
@@ -979,7 +864,7 @@ export default function Home() {
                   </div>
                   <div>
                     <p className="text-xs text-primary-400/80 uppercase tracking-wider">With</p>
-                    <p className="text-lg font-semibold text-white">ampleat</p>
+                    <p className="text-lg font-semibold text-white">Ampleat</p>
                   </div>
                 </div>
                 <ul className="space-y-4">
@@ -1004,83 +889,6 @@ export default function Home() {
       </section>
 
       {/* ════════════════════════════════════════
-          STATS
-          ════════════════════════════════════════ */}
-      <section className="relative py-16 px-6 border-y border-white/[0.04]">
-        <motion.div
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-50px" }}
-          className="mx-auto max-w-5xl grid grid-cols-2 lg:grid-cols-4 gap-4"
-        >
-          <StatCard value={2400} suffix="+" label="Recipes Generated" icon={SparklesIcon} />
-          <StatCard value={7} suffix="" label="Days Planned Ahead" icon={CalendarDaysIcon} />
-          <StatCard value={34} suffix="%" label="Less Food Waste" icon={HeartIcon} />
-          <StatCard value={12} suffix="" label="Countries" icon={ChartBarIcon} />
-        </motion.div>
-      </section>
-
-      {/* ════════════════════════════════════════
-          TESTIMONIALS
-          ════════════════════════════════════════ */}
-      <section id="testimonials" className="relative py-16 sm:py-20 px-6">
-        <div className="relative z-10 mx-auto max-w-6xl">
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-            className="text-center mb-10"
-          >
-            <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
-              <HeartIcon className="w-3.5 h-3.5 text-primary-400" />
-              <span className="text-[12px] font-medium text-primary-300 uppercase tracking-wider">Testimonials</span>
-            </motion.div>
-            <motion.h2 variants={fadeUp} custom={1} className="text-3xl sm:text-4xl md:text-[2.75rem] font-bold tracking-tight">
-              Loved by early
-              <span className="bg-gradient-to-r from-primary-400 to-supporting-300 bg-clip-text text-transparent"> testers</span>
-            </motion.h2>
-          </motion.div>
-
-          <motion.div
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
-            className="grid md:grid-cols-3 gap-6"
-          >
-            {testimonials.map((t, i) => (
-              <motion.div
-                key={t.name}
-                variants={scaleIn}
-                custom={i}
-                className="group relative rounded-2xl border border-white/[0.06] bg-surface-900/50 p-7 transition-all duration-500 hover:border-white/[0.12] hover:bg-surface-900/80"
-              >
-                {/* Quote mark */}
-                <div className="absolute top-6 right-6 text-4xl font-serif text-white/[0.05] leading-none select-none">&ldquo;</div>
-
-                <div className="flex items-center gap-1 mb-4">
-                  {[...Array(t.rating)].map((_, j) => (
-                    <StarIcon key={j} className="w-4 h-4 text-accent-400 fill-accent-400" />
-                  ))}
-                </div>
-
-                <p className="text-surface-300 text-[14px] leading-relaxed mb-6">{t.text}</p>
-
-                <div className="flex items-center gap-3 pt-4 border-t border-white/5">
-                  <div className={`w-10 h-10 rounded-full bg-gradient-to-br ${t.gradient} flex items-center justify-center text-sm font-bold text-white`}>
-                    {t.avatar}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-white">{t.name}</p>
-                    <p className="text-xs text-surface-500">{t.role}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </section>
-
-      {/* ════════════════════════════════════════
           FAQ
           ════════════════════════════════════════ */}
       <section id="faq" className="relative py-16 sm:py-20 px-6">
@@ -1090,7 +898,7 @@ export default function Home() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="text-center mb-10"
           >
             <motion.div variants={fadeUp} custom={0} className="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-primary-500/[0.06] px-4 py-1.5 mb-6">
@@ -1101,14 +909,14 @@ export default function Home() {
               Got questions?
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-4 text-surface-400 text-lg">
-              Here are the most common ones from our beta applicants.
+              A few things to know about Ampleat and how it works.
             </motion.p>
           </motion.div>
 
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-50px" }}
+            viewport={{ once: true, margin: "100px" }}
             className="rounded-2xl border border-white/[0.06] bg-surface-900/30 px-8"
           >
             {faqs.map((faq, i) => (
@@ -1128,7 +936,7 @@ export default function Home() {
       {/* ════════════════════════════════════════
           CTA
           ════════════════════════════════════════ */}
-      <section id="contact" className="relative py-16 sm:py-20 px-6">
+      <section id="beta-access" className="relative py-16 sm:py-20 px-6" aria-labelledby="beta-heading">
         <div className="absolute inset-0 pointer-events-none overflow-hidden">
           <motion.div
             className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[500px] bg-primary-500/[0.08] rounded-full blur-[200px]"
@@ -1149,30 +957,44 @@ export default function Home() {
             className="rounded-3xl border border-primary-500/20 bg-gradient-to-br from-primary-500/[0.06] to-surface-900/80 p-9 sm:p-12 text-center backdrop-blur-sm"
           >
             <motion.h2
+              id="beta-heading"
               variants={fadeUp}
               custom={1}
               className="text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight"
             >
-              Ready to put your
+              Make more of
               <span className="block mt-1 bg-gradient-to-r from-primary-400 via-supporting-300 to-primary-500 bg-clip-text text-transparent">
-                kitchen on autopilot?
+                what you have
               </span>
             </motion.h2>
             <motion.p variants={fadeUp} custom={2} className="mt-5 text-surface-400 text-lg leading-relaxed max-w-lg mx-auto">
-              Join the private beta. Be among the first to experience AI powered meal planning that actually understands your life.
+              Help shape Ampleat. Apply to test the private beta, try it in your own kitchen, and tell us what makes dinner easier.
             </motion.p>
             <motion.div variants={fadeUp} custom={3} className="mt-10 flex flex-col items-center gap-4">
               <Link
-                href="mailto:hello@ampleat.com"
+                href="/apply"
                 className="group relative inline-flex items-center justify-center gap-2.5 rounded-xl bg-primary-500 px-8 py-4 text-base font-semibold text-white shadow-xl shadow-primary-500/25 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-2xl hover:shadow-primary-500/40 hover:bg-primary-400"
               >
-                Contact ampleat
+                Apply to test Ampleat
                 <ArrowRightIcon className="w-4 h-4 transition-transform group-hover:translate-x-1" />
               </Link>
-              <p className="text-sm text-surface-500">Questions, partnerships, or feedback? We&apos;d love to hear from you.</p>
+              <p className="text-sm text-surface-500">Free during the private beta. No credit card required.</p>
             </motion.div>
           </motion.div>
         </motion.div>
+      </section>
+
+      <section id="contact" className="relative px-6" aria-labelledby="contact-heading">
+        <div className="contact-panel" data-scroll-reveal="rise">
+          <div>
+            <span className="contact-eyebrow">Contact</span>
+            <h2 id="contact-heading">Let&apos;s talk.</h2>
+            <p>Questions, partnerships, or something you&apos;d like to share? We&apos;d love to hear from you.</p>
+          </div>
+          <Link href="mailto:hello@ampleat.com" className="inline-flex items-center justify-center gap-2.5 rounded-full bg-primary-500 px-7 py-3.5 text-base font-semibold text-white hover:bg-primary-400 transition-colors">
+            Contact Ampleat <ArrowRightIcon className="h-4 w-4" aria-hidden="true" />
+          </Link>
+        </div>
       </section>
 
       {/* ════════════════════════════════════════
@@ -1180,5 +1002,6 @@ export default function Home() {
           ════════════════════════════════════════ */}
       <Footer />
     </div>
+    </MotionConfig>
   );
 }

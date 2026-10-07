@@ -188,7 +188,7 @@ export default function Login() {
     setTimeout(() => {
       setGeneratingRecipe(false);
       if (selected.length === 0) {
-        setAiRecipe("Please check at least one ingredient in your pantry above to let ampleat build a recipe!");
+        setAiRecipe("Please check at least one ingredient in your pantry above to let Ampleat build a recipe!");
         return;
       }
       setAiRecipe(
@@ -290,7 +290,7 @@ export default function Login() {
                   <h2 className="text-lg font-bold text-white">AI Recipe Assistant</h2>
                 </div>
                 <p className="text-xs text-surface-450 mb-6">
-                  Select ingredients in your pantry on the left, then click below to let ampleat build an adaptive recipe card automatically.
+                  Select ingredients in your pantry on the left, then click below to let Ampleat build an adaptive recipe card automatically.
                 </p>
 
                 <button

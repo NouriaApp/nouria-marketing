@@ -3,7 +3,7 @@ import LegalDocument from "@/components/LegalDocument";
 import { termsSections } from "@/content/legal";
 
 export const metadata: Metadata = {
-  title: "Terms of Service | ampleat",
+  title: "Terms of Service | Ampleat",
   description: "Ampleat’s terms of service for its website and private beta kitchen-assistant app.",
 };
 

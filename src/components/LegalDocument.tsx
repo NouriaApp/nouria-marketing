@@ -8,7 +8,7 @@ export default function LegalDocument({ title, sections }: { title: string; sect
     <div className="relative min-h-dvh bg-surface-950 text-surface-100 flex flex-col overflow-x-hidden">
       <Navbar />
       <main className="flex-grow mx-auto w-full max-w-4xl px-6 pt-12 pb-24 sm:pt-16">
-        <Link href="/" className="text-base text-primary-700 hover:underline">← Back to ampleat</Link>
+        <Link href="/" className="text-base text-primary-700 hover:underline">← Back to Ampleat</Link>
         <header className="mt-8 mb-10 border-b border-surface-700 pb-8">
           <h1 className="text-4xl sm:text-5xl text-surface-50 leading-tight">{title}</h1>
           <p className="mt-4 text-sm text-surface-400">Last updated: October 5, 2026</p>

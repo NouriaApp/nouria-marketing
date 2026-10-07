@@ -12,7 +12,7 @@ export default function Support() {
   const [formData, setFormData] = useState({ name: "", email: "", topic: "general", message: "" });
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    const subject = encodeURIComponent(`ampleat ${formData.topic} inquiry from ${formData.name}`);
+    const subject = encodeURIComponent(`Ampleat ${formData.topic} inquiry from ${formData.name}`);
     const body = encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\n\n${formData.message}`);
     window.location.href = `mailto:hello@ampleat.com?subject=${subject}&body=${body}`;
   };

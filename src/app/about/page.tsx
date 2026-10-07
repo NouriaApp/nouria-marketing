@@ -86,7 +86,7 @@ export default function About() {
             custom={2}
             className="text-lg sm:text-xl text-surface-400 leading-relaxed max-w-2xl mx-auto"
           >
-            At ampleat, we believe cooking shouldn&apos;t be a source of daily cognitive load. We are building the intelligent layer for your kitchen.
+            At Ampleat, we believe cooking shouldn&apos;t be a source of daily cognitive load. We are building the intelligent layer for your kitchen.
           </motion.p>
         </motion.div>
 
@@ -110,7 +110,7 @@ export default function About() {
             },
             {
               title: "Simplify Living",
-              desc: "Decision fatigue is real. ampleat takes over the planning, scaling, and prep so you can focus on enjoying the meal.",
+              desc: "Decision fatigue is real. Ampleat takes over the planning, scaling, and prep so you can focus on enjoying the meal.",
               icon: UserGroupIcon,
             },
           ].map((item, i) => (

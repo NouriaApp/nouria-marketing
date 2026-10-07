@@ -6,7 +6,7 @@ export const privacySections: LegalSection[] = [
   {
     "title": "Scope and contact",
     "paragraphs": [
-      "This Privacy Policy explains how Ampleat (also branded ampleat, formerly Nouria) handles personal information when you visit our website, apply for beta access, contact us, or use our kitchen-assistant app. Ampleat is an unincorporated project operated by Nimai Garg. References to Ampleat describe the service and Nimai Garg as its operator, not an incorporated company. For privacy questions or requests, email hello@ampleat.com."
+      "This Privacy Policy explains how Ampleat (formerly Nouria) handles personal information when you visit our website, apply for beta access, contact us, or use our kitchen-assistant app. Ampleat is an unincorporated project operated by Nimai Garg. References to Ampleat describe the service and Nimai Garg as its operator, not an incorporated company. For privacy questions or requests, email hello@ampleat.com."
     ]
   },
   {
@@ -127,7 +127,7 @@ export const termsSections: LegalSection[] = [
   {
     "title": "Scope and acceptance",
     "paragraphs": [
-      "These Terms of Service govern the Ampleat website and the Ampleat Version 1.0 private beta kitchen-assistant app. Ampleat is also branded ampleat and was formerly named Nouria. Ampleat is an unincorporated project operated by Nimai Garg. These terms are between you and Nimai Garg as the operator of Ampleat, not an incorporated company.",
+      "These Terms of Service govern the Ampleat website and the Ampleat Version 1.0 private beta kitchen-assistant app. Ampleat was formerly named Nouria. Ampleat is an unincorporated project operated by Nimai Garg. These terms are between you and Nimai Garg as the operator of Ampleat, not an incorporated company.",
       "By accessing or using the service, you agree to these terms and applicable laws and are responsible for compliance with laws that apply to your use. If you do not agree, do not use the service. Contact hello@ampleat.com with questions."
     ]
   },
@@ -196,7 +196,7 @@ export const termsSections: LegalSection[] = [
   {
     "title": "AI recommendations, scans and accuracy",
     "paragraphs": [
-      "Generated recipes, ingredient identifications, quantities, expiry estimates, grocery lists and substitutions can be inaccurate, incomplete or outdated. Review food suggestions and edits before saving them, and confirm actual ingredient usage before updating inventory. Recipe validation reduces risk but cannot guarantee allergen-free food, correct recognition, safe handling or suitability for every household member.",
+      "Generated recipes, ingredient identifications, quantities, expiry estimates and substitutions can be inaccurate, incomplete or outdated. Review food suggestions and edits before saving them, and confirm actual ingredient usage before updating inventory. Recipe validation reduces risk but cannot guarantee allergen-free food, correct recognition, safe handling or suitability for every household member.",
       "Website information and materials can contain technical, typographical or photographic errors. Ampleat does not guarantee that they are accurate, complete or current. Materials and features may be changed; legally required notices and existing consumer rights remain unaffected. Marketing descriptions do not replace product labels, independent safety checks or qualified medical advice."
     ]
   },

@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import Script from "next/script";
 
 export const metadata: Metadata = {
-  title: "ampleat Waitlist Form",
-  description: "Apply for early access to ampleat.",
+  title: "Ampleat Waitlist Form",
+  description: "Apply for early access to Ampleat.",
 };
 
 export default function ApplyPage() {
@@ -20,7 +20,7 @@ export default function ApplyPage() {
         frameBorder="0"
         marginHeight={0}
         marginWidth={0}
-        title="ampleat Waitlist Form"
+        title="Ampleat Waitlist Form"
         className="absolute inset-0 h-full w-full border-0"
       />
     </main>
