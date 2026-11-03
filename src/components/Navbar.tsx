@@ -21,6 +21,7 @@ export default function Navbar() {
     { label: "Product", href: getLinkHref("#product") },
     { label: "Features", href: getLinkHref("#features") },
     { label: "Vision", href: getLinkHref("#vision") },
+    { label: "Help Center", href: "/help" },
     { label: "Contact", href: getLinkHref("#contact") },
   ];
 
@@ -45,7 +46,7 @@ export default function Navbar() {
           </Link>
           <div className="hidden md:flex items-center gap-8">
             {links.map((link) => (
-              <Link key={link.label} href={link.href} className="text-[15px] font-medium text-surface-300 hover:text-primary-600 transition-colors duration-300 tracking-wide">
+              <Link key={link.label} href={link.href} aria-current={link.href === "/help" && pathname.startsWith("/help") ? "page" : undefined} className="text-[15px] font-medium text-surface-300 hover:text-primary-600 transition-colors duration-300 tracking-wide">
                 {link.label}
               </Link>
             ))}
@@ -65,7 +66,7 @@ export default function Navbar() {
             {menuOpen && (
               <motion.div initial={{ opacity: 0, y: -8 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -8 }} className="absolute top-[calc(100%+0.6rem)] inset-x-0 rounded-2xl border border-surface-700 bg-white p-3 shadow-xl md:hidden">
                 {links.map((link) => (
-                  <Link key={link.label} href={link.href} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base font-medium text-surface-100 hover:bg-surface-900 hover:text-primary-700">
+                  <Link key={link.label} href={link.href} aria-current={link.href === "/help" && pathname.startsWith("/help") ? "page" : undefined} onClick={() => setMenuOpen(false)} className="block rounded-xl px-4 py-3 text-base font-medium text-surface-100 hover:bg-surface-900 hover:text-primary-700">
                     {link.label}
                   </Link>
                 ))}

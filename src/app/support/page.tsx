@@ -56,10 +56,10 @@ export default function Support() {
             <div className="rounded-2xl border border-white/[0.06] bg-surface-900/40 p-5 flex items-start gap-4">
               <QuestionMarkCircleIcon className="w-6 h-6 text-primary-400 flex-shrink-0 mt-0.5" />
               <div>
-                <h3 className="font-semibold text-white text-sm">FAQ Center</h3>
-                <p className="text-xs text-surface-450 mt-1">Find fast answers to common questions.</p>
-                <Link href="/#faq" className="text-xs text-primary-400 hover:underline mt-2 block font-medium">
-                  Browse FAQ
+                <h3 className="font-semibold text-white text-sm">Help Center</h3>
+                <p className="text-xs text-surface-450 mt-1">Explore product guides and answers for your kitchen.</p>
+                <Link href="/help" className="text-xs text-primary-400 hover:underline mt-2 block font-medium">
+                  Browse Help Center
                 </Link>
               </div>
             </div>

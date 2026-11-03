@@ -42,7 +42,11 @@ export default function Footer() {
     },
     {
       title: "Access",
-      links: [{ name: "Beta Access", href: TALLY_URL, external: true }],
+      links: [
+        { name: "Beta Access", href: TALLY_URL, external: true },
+        { name: "Help Center", href: "/help" },
+        { name: "Contact Support", href: "/support" },
+      ],
     },
     {
       title: "Legal",

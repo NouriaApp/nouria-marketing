@@ -24,6 +24,7 @@ export default function SectionNavigation() {
         if (!section) return;
         event.preventDefault();
         section.scrollIntoView({ behavior: "instant", block: "start" });
+        if (anchor.hasAttribute("data-skip-link") && section instanceof HTMLElement) section.focus({ preventScroll: true });
       } else {
         event.preventDefault();
         pendingSection.current = id;
